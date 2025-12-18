@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Family Ties - Trivia Game",
-  description: "A fun multiplayer trivia game for family gatherings!",
+  title: "Brainy Bunch - Family Trivia Game",
+  description: "Who's the smartest in the bunch? A fun multiplayer trivia game for family gatherings!",
 };
 
 export const viewport: Viewport = {

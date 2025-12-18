@@ -11,6 +11,7 @@ function GameContent() {
   const { state, selectAnswer, nextRound } = useGame();
   const [timeLeft, setTimeLeft] = useState(15);
   const [showStreakBonus, setShowStreakBonus] = useState(false);
+  const [showHalftime, setShowHalftime] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const currentQuestion = state.session?.currentQuestion;
@@ -65,8 +66,24 @@ function GameContent() {
   };
 
   const handleNextRound = () => {
+    // Show halftime after round 10 (halfway point)
+    const halftimeRound = Math.floor(totalRounds / 2);
+    if (currentRound === halftimeRound && !showHalftime) {
+      setShowHalftime(true);
+      return;
+    }
     nextRound();
   };
+
+  const handleContinueFromHalftime = () => {
+    setShowHalftime(false);
+    nextRound();
+  };
+
+  const players = state.session?.players || [];
+  const redTeam = players.filter((p) => p.team === 'red');
+  const blueTeam = players.filter((p) => p.team === 'blue');
+  const halftimeLeader = teamScores.red > teamScores.blue ? 'red' : teamScores.blue > teamScores.red ? 'blue' : 'tie';
 
   const getAnswerClass = (answer: string) => {
     if (!state.showResult) {
@@ -92,6 +109,120 @@ function GameContent() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-2xl text-white/50">Loading...</div>
       </div>
+    );
+  }
+
+  // Halftime Leaderboard Screen
+  if (showHalftime) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
+        {/* Halftime Badge */}
+        <div className="text-center mb-8 animate-bounce-in">
+          <div className="text-6xl mb-4">⏸️</div>
+          <h1 className="text-4xl font-black text-warning mb-2">HALFTIME!</h1>
+          <p className="text-white/60">Round {currentRound} of {totalRounds} complete</p>
+        </div>
+
+        {/* Leaderboard */}
+        <div className="w-full max-w-sm mb-8">
+          <h2 className="text-center text-xl font-bold mb-4">Leaderboard</h2>
+
+          <div className="grid grid-cols-2 gap-4">
+            {/* Red Team */}
+            <div className={`card text-center ${halftimeLeader === 'red' ? 'border-team-red bg-team-red/10 scale-105' : ''}`}>
+              <div className="text-xs text-white/50 uppercase mb-1">Team Red</div>
+              <div className="text-4xl font-black text-team-red mb-2">
+                {Math.floor(teamScores.red)}
+              </div>
+              {halftimeLeader === 'red' && <span className="text-2xl">👑</span>}
+              <div className="mt-3 space-y-1">
+                {redTeam.map((p) => (
+                  <div key={p.id} className="text-sm text-white/60">
+                    {p.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Blue Team */}
+            <div className={`card text-center ${halftimeLeader === 'blue' ? 'border-team-blue bg-team-blue/10 scale-105' : ''}`}>
+              <div className="text-xs text-white/50 uppercase mb-1">Team Blue</div>
+              <div className="text-4xl font-black text-team-blue mb-2">
+                {Math.floor(teamScores.blue)}
+              </div>
+              {halftimeLeader === 'blue' && <span className="text-2xl">👑</span>}
+              <div className="mt-3 space-y-1">
+                {blueTeam.map((p) => (
+                  <div key={p.id} className="text-sm text-white/60">
+                    {p.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Tie indicator */}
+          {halftimeLeader === 'tie' && (
+            <div className="text-center mt-4">
+              <span className="text-2xl">🤝</span>
+              <p className="text-warning font-bold">It&apos;s all tied up!</p>
+            </div>
+          )}
+        </div>
+
+        {/* Stats */}
+        <div className="card w-full max-w-sm mb-8">
+          <h3 className="font-bold text-center mb-4">Halftime Stats</h3>
+          <div className="grid grid-cols-2 gap-4 text-center">
+            <div>
+              <div className="text-2xl font-bold text-primary">
+                {currentRound}
+              </div>
+              <div className="text-xs text-white/50">Questions Answered</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-primary">
+                {totalRounds - currentRound}
+              </div>
+              <div className="text-xs text-white/50">Questions Left</div>
+            </div>
+          </div>
+          <div className="mt-4 text-center">
+            <div className="text-lg font-bold">
+              {Math.abs(teamScores.red - teamScores.blue) < 0.5
+                ? "Neck and neck!"
+                : `${halftimeLeader === 'red' ? 'Red' : 'Blue'} leads by ${Math.floor(Math.abs(teamScores.red - teamScores.blue))} point${Math.floor(Math.abs(teamScores.red - teamScores.blue)) !== 1 ? 's' : ''}`}
+            </div>
+          </div>
+        </div>
+
+        {/* Streaks */}
+        {(streaks.red >= 2 || streaks.blue >= 2) && (
+          <div className="card w-full max-w-sm mb-8 bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/30">
+            <div className="text-center">
+              <span className="text-2xl">🔥</span>
+              <p className="text-sm text-white/70 mt-1">
+                {streaks.red >= streaks.blue
+                  ? `Team Red is on a ${streaks.red}-answer streak!`
+                  : `Team Blue is on a ${streaks.blue}-answer streak!`}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Continue Button */}
+        <button
+          onClick={handleContinueFromHalftime}
+          className="btn-primary w-full max-w-sm text-lg animate-pulse"
+        >
+          Continue to Round {currentRound + 1} →
+        </button>
+
+        {/* Team indicator */}
+        <div className={`fixed bottom-0 left-0 right-0 h-1 ${
+          playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'
+        }`} />
+      </main>
     );
   }
 

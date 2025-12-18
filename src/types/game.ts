@@ -45,9 +45,19 @@ export interface GameSession {
 
 export type Genre =
   | 'eighties_music'
+  | 'nineties_music'
+  | 'two_thousands_music'
   | 'tv_shows'
   | 'classic_movies'
   | 'holiday_movies'
+  | 'disney_movies'
+  | 'sports_legends'
+  | 'food_drinks'
+  | 'cartoons'
+  | 'video_games'
+  | 'world_geography'
+  | 'family_sitcoms'
+  | 'reality_tv'
   | 'mix_it_up';
 
 export interface GenreOption {
@@ -55,8 +65,8 @@ export interface GenreOption {
   name: string;
   icon: string;
   description: string;
-  apiCategory: number | null; // Open Trivia DB category ID
-  useCustomQuestions: boolean; // Whether to use our curated questions
+  apiCategory: number | null;
+  useCustomQuestions: boolean;
 }
 
 export const GENRES: GenreOption[] = [
@@ -65,7 +75,23 @@ export const GENRES: GenreOption[] = [
     name: "80's Music",
     icon: '🎸',
     description: 'Madonna, Michael Jackson, Prince & more!',
-    apiCategory: 12, // Entertainment: Music
+    apiCategory: 12,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'nineties_music',
+    name: "90's Music",
+    icon: '💿',
+    description: 'Nirvana, Backstreet Boys, Spice Girls!',
+    apiCategory: 12,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'two_thousands_music',
+    name: "2000's Music",
+    icon: '📀',
+    description: 'Beyoncé, Eminem, Britney & more!',
+    apiCategory: 12,
     useCustomQuestions: true,
   },
   {
@@ -73,15 +99,31 @@ export const GENRES: GenreOption[] = [
     name: "90's/2000's TV",
     icon: '📺',
     description: 'Friends, Seinfeld, The Office & more!',
-    apiCategory: 14, // Entertainment: Television
+    apiCategory: 14,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'family_sitcoms',
+    name: 'Family Sitcoms',
+    icon: '🛋️',
+    description: 'Full House, Fresh Prince, Married with Children!',
+    apiCategory: 14,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'reality_tv',
+    name: 'Reality TV',
+    icon: '🌹',
+    description: 'Survivor, American Idol, The Bachelor!',
+    apiCategory: 14,
     useCustomQuestions: true,
   },
   {
     id: 'classic_movies',
     name: 'Classic Movies',
     icon: '🎬',
-    description: 'Timeless films from Hollywood\'s golden era',
-    apiCategory: 11, // Entertainment: Film
+    description: "Timeless films from Hollywood's golden era",
+    apiCategory: 11,
     useCustomQuestions: true,
   },
   {
@@ -89,7 +131,55 @@ export const GENRES: GenreOption[] = [
     name: 'Holiday Movies',
     icon: '🎄',
     description: 'Christmas classics & holiday favorites!',
-    apiCategory: 11, // Entertainment: Film
+    apiCategory: 11,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'disney_movies',
+    name: 'Disney Movies',
+    icon: '🏰',
+    description: 'Animated classics & Pixar favorites!',
+    apiCategory: 11,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'cartoons',
+    name: "80's/90's Cartoons",
+    icon: '📺',
+    description: 'Transformers, Ninja Turtles, Rugrats!',
+    apiCategory: 14,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'sports_legends',
+    name: 'Sports Legends',
+    icon: '🏆',
+    description: 'Famous athletes, Super Bowl, Olympics!',
+    apiCategory: 21,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'video_games',
+    name: 'Video Games',
+    icon: '🎮',
+    description: 'Classic & modern gaming trivia!',
+    apiCategory: 15,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'food_drinks',
+    name: 'Food & Drinks',
+    icon: '🍕',
+    description: 'Cooking, restaurants & famous dishes!',
+    apiCategory: null,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'world_geography',
+    name: 'World Geography',
+    icon: '🌍',
+    description: 'Countries, capitals & landmarks!',
+    apiCategory: 22,
     useCustomQuestions: true,
   },
   {

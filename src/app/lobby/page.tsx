@@ -52,7 +52,7 @@ function LobbyContent() {
     <main className="min-h-screen flex flex-col px-4 py-6 pb-24">
       {/* Header */}
       <div className="text-center mb-6">
-        <h1 className="text-3xl font-black text-primary mb-1">Family Ties</h1>
+        <h1 className="text-3xl font-black text-primary mb-1">Brainy Bunch</h1>
         <p className="text-white/40 text-sm">Game Lobby</p>
       </div>
 

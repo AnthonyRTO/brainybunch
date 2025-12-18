@@ -70,8 +70,8 @@ function ResultsContent() {
       {/* Logo */}
       <div className="relative w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-xl z-10">
         <Image
-          src="/logo.jpg"
-          alt="Family Ties Logo"
+          src="/brainy-bunch-logo.jpg"
+          alt="Brainy Bunch Logo"
           fill
           className="object-cover"
         />
@@ -178,7 +178,7 @@ function ResultsContent() {
 
       {/* Footer */}
       <p className="mt-8 text-white/30 text-sm relative z-10">
-        Thanks for playing Family Ties!
+        Thanks for playing Brainy Bunch!
       </p>
 
       <style jsx>{`
