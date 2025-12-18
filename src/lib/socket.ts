@@ -49,7 +49,7 @@ export interface RoomState {
     blue: Player[];
   };
   genre: string | null;
-  mode: 'team' | 'individual';
+  mode: 'team' | 'individual' | 'solo';
   status: 'lobby' | 'playing' | 'finished';
   currentRound: number;
   totalRounds: number;
@@ -82,7 +82,7 @@ export interface RoundResults {
   scores: { red: number; blue: number };
   playerScores: { [playerId: string]: number };
   streaks: { red: number; blue: number };
-  mode: 'team' | 'individual';
+  mode: 'team' | 'individual' | 'solo';
 }
 
 // Event types
@@ -107,7 +107,7 @@ export interface ClientToServerEvents {
   'create-room': (data: { playerName: string }) => void;
   'join-room': (data: { roomCode: string; playerName: string }) => void;
   'select-genre': (data: { roomCode: string; genre: string }) => void;
-  'select-mode': (data: { roomCode: string; mode: 'team' | 'individual' }) => void;
+  'select-mode': (data: { roomCode: string; mode: 'team' | 'individual' | 'solo' }) => void;
   'start-game': (data: { roomCode: string }) => void;
   'submit-answer': (data: { roomCode: string; answer: string; timeMs: number }) => void;
 }

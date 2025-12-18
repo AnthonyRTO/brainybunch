@@ -9,7 +9,7 @@ function LobbyContent() {
   const router = useRouter();
   const { state, selectGenre, selectMode, startGame, isHost, getMyTeam, leaveRoom } = useGame();
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
-  const [selectedMode, setSelectedMode] = useState<'team' | 'individual'>('team');
+  const [selectedMode, setSelectedMode] = useState<'team' | 'individual' | 'solo'>('team');
   const [isStarting, setIsStarting] = useState(false);
 
   const room = state.room;
@@ -55,7 +55,7 @@ function LobbyContent() {
     selectGenre(genre);
   };
 
-  const handleModeSelect = (mode: 'team' | 'individual') => {
+  const handleModeSelect = (mode: 'team' | 'individual' | 'solo') => {
     setSelectedMode(mode);
     selectMode(mode);
   };
@@ -181,18 +181,18 @@ function LobbyContent() {
           <h2 className="text-lg font-bold mb-3 text-center">
             Game Mode
           </h2>
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-3 gap-2 mb-6">
             <button
-              onClick={() => handleModeSelect('team')}
+              onClick={() => handleModeSelect('solo')}
               className={`card text-center transition-all ${
-                selectedMode === 'team'
+                selectedMode === 'solo'
                   ? 'border-primary bg-primary/20 scale-105'
                   : 'hover:bg-white/5'
               }`}
             >
-              <div className="text-3xl mb-2">👥</div>
-              <h3 className="font-bold">Team</h3>
-              <p className="text-white/50 text-xs">Red vs Blue</p>
+              <div className="text-2xl mb-1">🎯</div>
+              <h3 className="font-bold text-sm">Solo</h3>
+              <p className="text-white/50 text-xs">Just you</p>
             </button>
             <button
               onClick={() => handleModeSelect('individual')}
@@ -202,9 +202,21 @@ function LobbyContent() {
                   : 'hover:bg-white/5'
               }`}
             >
-              <div className="text-3xl mb-2">🏆</div>
-              <h3 className="font-bold">Individual</h3>
+              <div className="text-2xl mb-1">🏆</div>
+              <h3 className="font-bold text-sm">Individual</h3>
               <p className="text-white/50 text-xs">Free for all</p>
+            </button>
+            <button
+              onClick={() => handleModeSelect('team')}
+              className={`card text-center transition-all ${
+                selectedMode === 'team'
+                  ? 'border-primary bg-primary/20 scale-105'
+                  : 'hover:bg-white/5'
+              }`}
+            >
+              <div className="text-2xl mb-1">👥</div>
+              <h3 className="font-bold text-sm">Team</h3>
+              <p className="text-white/50 text-xs">Red vs Blue</p>
             </button>
           </div>
         </>
@@ -241,8 +253,8 @@ function LobbyContent() {
         <div className="card text-center">
           <div className="text-4xl mb-3">⏳</div>
           <h2 className="text-xl font-bold mb-2">
-            {room.mode === 'individual'
-              ? 'Individual Mode'
+            {room.mode === 'individual' || room.mode === 'solo'
+              ? room.mode === 'solo' ? 'Solo Mode' : 'Individual Mode'
               : `You're on Team ${myTeam === 'red' ? 'Red 🔴' : 'Blue 🔵'}`
             }
           </h2>
@@ -252,7 +264,9 @@ function LobbyContent() {
           <div className="space-y-2">
             {room.mode && (
               <p className="text-white/70 text-sm">
-                Mode: <span className="text-primary font-bold">{room.mode === 'team' ? '👥 Team' : '🏆 Individual'}</span>
+                Mode: <span className="text-primary font-bold">
+                  {room.mode === 'team' ? '👥 Team' : room.mode === 'solo' ? '🎯 Solo' : '🏆 Individual'}
+                </span>
               </p>
             )}
             {room.genre && (
@@ -284,14 +298,14 @@ function LobbyContent() {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background to-transparent">
           <button
             onClick={handleStartGame}
-            disabled={!selectedGenre || isStarting || room.players.length < 2}
+            disabled={!selectedGenre || isStarting || (selectedMode !== 'solo' && room.players.length < 2)}
             className="btn-primary w-full text-xl py-5 flex items-center justify-center gap-2"
           >
             {isStarting ? (
               <>
                 <span className="animate-spin">⏳</span> Starting...
               </>
-            ) : room.players.length < 2 ? (
+            ) : selectedMode !== 'solo' && room.players.length < 2 ? (
               <>
                 👥 Need at least 2 players
               </>

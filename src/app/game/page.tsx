@@ -22,6 +22,10 @@ function GameContent() {
   const playerTeam = getMyTeam();
   const roundResults = state.roundResults;
   const isIndividualMode = room?.mode === 'individual';
+  const isSoloMode = room?.mode === 'solo';
+
+  // Get current player's score for solo mode
+  const myScore = room?.players.find(p => p.id === state.playerId)?.score || 0;
 
   // Get sorted players for individual mode leaderboard
   const sortedPlayers = room?.players
@@ -154,9 +158,22 @@ function GameContent() {
 
         {/* Leaderboard */}
         <div className="w-full max-w-sm mb-8">
-          <h2 className="text-center text-xl font-bold mb-4">Leaderboard</h2>
+          <h2 className="text-center text-xl font-bold mb-4">
+            {isSoloMode ? 'Your Progress' : 'Leaderboard'}
+          </h2>
 
-          {isIndividualMode ? (
+          {isSoloMode ? (
+            // Solo mode: show personal progress
+            <div className="card text-center">
+              <div className="text-5xl font-black text-primary mb-2">
+                {Math.floor(myScore)}
+              </div>
+              <div className="text-white/60">points so far</div>
+              <div className="mt-4 text-sm text-white/40">
+                {Math.floor(myScore / (currentRound - 1) * 10) / 10 || 0} avg per question
+              </div>
+            </div>
+          ) : isIndividualMode ? (
             // Individual mode: show player rankings
             <div className="space-y-2">
               {sortedPlayers.map((p, index) => (
@@ -238,7 +255,7 @@ function GameContent() {
         </button>
 
         {/* Team indicator (only for team mode) */}
-        {!isIndividualMode && (
+        {!isIndividualMode && !isSoloMode && (
           <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
         )}
       </main>
@@ -249,7 +266,27 @@ function GameContent() {
     <main className="min-h-screen flex flex-col px-4 py-4 pb-6">
       {/* Header with scores */}
       <div className="flex items-center justify-between mb-4">
-        {isIndividualMode ? (
+        {isSoloMode ? (
+          // Solo mode: show personal score
+          <>
+            <div className="flex items-center gap-2">
+              <span className="text-xs px-3 py-1 rounded-full bg-primary/20 text-primary font-bold">
+                🎯 {Math.floor(myScore)} pts
+              </span>
+            </div>
+
+            <div className="text-center">
+              <div className={`text-3xl font-black ${getTimerColor()}`}>
+                {state.showResult ? '✓' : timeLeft}
+              </div>
+              <div className="text-white/30 text-xs">
+                Round {currentRound}/{totalRounds}
+              </div>
+            </div>
+
+            <div className="w-16" /> {/* Spacer for balance */}
+          </>
+        ) : isIndividualMode ? (
           // Individual mode: show top 3 players
           <>
             <div className="flex items-center gap-1">
@@ -455,7 +492,7 @@ function GameContent() {
       )}
 
       {/* Team indicator (only for team mode) */}
-      {!isIndividualMode && (
+      {!isIndividualMode && !isSoloMode && (
         <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
       )}
     </main>

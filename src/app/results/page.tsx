@@ -16,6 +16,10 @@ function ResultsContent() {
   const blueTeam = room?.teams.blue || [];
   const playerTeam = getMyTeam();
   const isIndividualMode = room?.mode === 'individual';
+  const isSoloMode = room?.mode === 'solo';
+
+  // Get player's score for solo mode
+  const myScore = room?.players.find(p => p.id === state.playerId)?.score || 0;
 
   // Get sorted players for individual mode
   const sortedPlayers = room?.players
@@ -33,6 +37,18 @@ function ResultsContent() {
   const individualWinner = sortedPlayers.length > 0 ? sortedPlayers[0] : null;
   const isIndividualWinner = individualWinner?.id === state.playerId;
   const isTeamWinner = playerTeam === teamWinner;
+
+  // Calculate grade for solo mode
+  const getGrade = (score: number, totalRounds: number) => {
+    const percentage = (score / (totalRounds * 2.5)) * 100; // Max ~2.5 points per question
+    if (percentage >= 90) return { grade: 'A+', emoji: '🌟', message: 'Outstanding!' };
+    if (percentage >= 80) return { grade: 'A', emoji: '🎉', message: 'Excellent!' };
+    if (percentage >= 70) return { grade: 'B', emoji: '👏', message: 'Great job!' };
+    if (percentage >= 60) return { grade: 'C', emoji: '👍', message: 'Good effort!' };
+    if (percentage >= 50) return { grade: 'D', emoji: '💪', message: 'Keep practicing!' };
+    return { grade: 'F', emoji: '📚', message: 'Study up!' };
+  };
+  const soloGrade = getGrade(myScore, room?.totalRounds || 20);
 
   useEffect(() => {
     setShowConfetti(true);
@@ -102,7 +118,16 @@ function ResultsContent() {
 
       {/* Winner Announcement */}
       <div className="text-center mb-8 animate-bounce-in relative z-10">
-        {isIndividualMode ? (
+        {isSoloMode ? (
+          // Solo mode: show grade
+          <>
+            <div className="text-6xl mb-4">{soloGrade.emoji}</div>
+            <h1 className="text-4xl font-black text-primary mb-2">
+              Game Complete!
+            </h1>
+            <p className="text-white/60 text-lg">{soloGrade.message}</p>
+          </>
+        ) : isIndividualMode ? (
           // Individual mode winner
           <>
             <div className="text-6xl mb-4">🏆</div>
@@ -143,7 +168,20 @@ function ResultsContent() {
       </div>
 
       {/* Final Scores */}
-      {isIndividualMode ? (
+      {isSoloMode ? (
+        // Solo mode: show personal score card with grade
+        <div className="w-full max-w-sm mb-8 relative z-10">
+          <div className="card text-center border-primary bg-primary/10">
+            <div className="text-6xl font-black mb-2">{soloGrade.grade}</div>
+            <div className="text-4xl font-black text-primary mb-4">
+              {Math.floor(myScore)} points
+            </div>
+            <div className="text-white/60">
+              out of ~{Math.floor(room.totalRounds * 2.5)} possible
+            </div>
+          </div>
+        </div>
+      ) : isIndividualMode ? (
         // Individual mode: show player rankings
         <div className="w-full max-w-sm mb-8 relative z-10 space-y-2">
           {sortedPlayers.map((p, index) => (
@@ -216,27 +254,31 @@ function ResultsContent() {
       {/* Stats */}
       <div className="card w-full max-w-sm mb-8 relative z-10">
         <h3 className="font-bold text-center mb-4">Game Stats</h3>
-        <div className="grid grid-cols-3 gap-4 text-center">
+        <div className={`grid ${isSoloMode ? 'grid-cols-2' : 'grid-cols-3'} gap-4 text-center`}>
           <div>
             <div className="text-2xl font-bold text-primary">
               {room.totalRounds}
             </div>
             <div className="text-xs text-white/50">Questions</div>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-primary">
-              {room.players.length}
+          {!isSoloMode && (
+            <div>
+              <div className="text-2xl font-bold text-primary">
+                {room.players.length}
+              </div>
+              <div className="text-xs text-white/50">Players</div>
             </div>
-            <div className="text-xs text-white/50">Players</div>
-          </div>
+          )}
           <div>
             <div className="text-2xl font-bold text-primary">
-              {isIndividualMode
+              {isSoloMode
+                ? Math.floor(myScore)
+                : isIndividualMode
                 ? Math.floor(sortedPlayers.reduce((sum, p) => sum + (p.score || 0), 0))
                 : Math.floor(teamScores.red + teamScores.blue)
               }
             </div>
-            <div className="text-xs text-white/50">Total Points</div>
+            <div className="text-xs text-white/50">{isSoloMode ? 'Your Score' : 'Total Points'}</div>
           </div>
         </div>
       </div>
