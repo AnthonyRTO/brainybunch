@@ -1,37 +1,38 @@
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useGame } from '@/context/GameContext';
 
 function GameContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const code = searchParams.get('code') || '';
-  const { state, selectAnswer, nextRound } = useGame();
+  const { state, submitAnswer, getMyTeam } = useGame();
   const [timeLeft, setTimeLeft] = useState(15);
   const [showStreakBonus, setShowStreakBonus] = useState(false);
   const [showHalftime, setShowHalftime] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastRoundRef = useRef<number>(0);
 
-  const currentQuestion = state.session?.currentQuestion;
-  const currentRound = state.session?.currentRound || 0;
-  const totalRounds = state.session?.totalRounds || 20;
-  const teamScores = state.session?.teamScores || { red: 0, blue: 0 };
-  const streaks = state.session?.streaks || { red: 0, blue: 0 };
-  const playerTeam = state.player?.team;
+  const room = state.room;
+  const currentQuestion = state.currentQuestion;
+  const currentRound = room?.currentRound || 0;
+  const totalRounds = room?.totalRounds || 20;
+  const teamScores = room?.scores || { red: 0, blue: 0 };
+  const streaks = room?.streaks || { red: 0, blue: 0 };
+  const playerTeam = getMyTeam();
+  const roundResults = state.roundResults;
 
   // Timer countdown
   useEffect(() => {
-    if (state.showResult) return;
+    if (state.showResult || !currentQuestion) return;
 
     setTimeLeft(15);
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          // Time's up - auto select wrong
+          // Time's up - auto select wrong (server will handle this)
           if (!state.selectedAnswer) {
-            selectAnswer('__timeout__');
+            submitAnswer('__timeout__');
           }
           return 0;
         }
@@ -42,58 +43,71 @@ function GameContent() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [currentRound, state.showResult, state.selectedAnswer, selectAnswer]);
+  }, [currentRound, state.showResult, state.selectedAnswer, currentQuestion, submitAnswer]);
 
-  // Check for streak bonus
+  // Check for streak bonus when my result comes in
   useEffect(() => {
-    if (playerTeam && streaks[playerTeam] >= 3 && state.selectedAnswer) {
+    if (state.myResult?.streakBonus) {
       setShowStreakBonus(true);
       setTimeout(() => setShowStreakBonus(false), 1500);
     }
-  }, [streaks, playerTeam, state.selectedAnswer]);
+  }, [state.myResult]);
+
+  // Show halftime after round 10
+  useEffect(() => {
+    const halftimeRound = Math.floor(totalRounds / 2);
+    if (currentRound > halftimeRound && lastRoundRef.current === halftimeRound && !showHalftime) {
+      setShowHalftime(true);
+    }
+    lastRoundRef.current = currentRound;
+  }, [currentRound, totalRounds, showHalftime]);
 
   // Navigate to results when game ends
   useEffect(() => {
-    if (state.session?.status === 'finished') {
-      router.push(`/results?code=${code}`);
+    if (room?.status === 'finished') {
+      router.push('/results');
     }
-  }, [state.session?.status, code, router]);
+  }, [room?.status, router]);
+
+  // Redirect to home if no room
+  useEffect(() => {
+    if (!room && !state.isConnected) {
+      const timeout = setTimeout(() => {
+        if (!state.room) {
+          router.push('/');
+        }
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [room, state.isConnected, state.room, router]);
 
   const handleAnswer = (answer: string) => {
     if (state.selectedAnswer) return;
     if (timerRef.current) clearInterval(timerRef.current);
-    selectAnswer(answer);
-  };
-
-  const handleNextRound = () => {
-    // Show halftime after round 10 (halfway point)
-    const halftimeRound = Math.floor(totalRounds / 2);
-    if (currentRound === halftimeRound && !showHalftime) {
-      setShowHalftime(true);
-      return;
-    }
-    nextRound();
+    submitAnswer(answer);
   };
 
   const handleContinueFromHalftime = () => {
     setShowHalftime(false);
-    nextRound();
   };
 
-  const players = state.session?.players || [];
-  const redTeam = players.filter((p) => p.team === 'red');
-  const blueTeam = players.filter((p) => p.team === 'blue');
+  const redTeam = room?.teams.red || [];
+  const blueTeam = room?.teams.blue || [];
   const halftimeLeader = teamScores.red > teamScores.blue ? 'red' : teamScores.blue > teamScores.red ? 'blue' : 'tie';
 
   const getAnswerClass = (answer: string) => {
     if (!state.showResult) {
       return state.selectedAnswer === answer ? 'selected' : '';
     }
-    if (answer === currentQuestion?.correctAnswer) {
+    // Use roundResults to show correct answer
+    if (roundResults && answer === roundResults.correctAnswer) {
       return 'correct';
     }
-    if (state.selectedAnswer === answer) {
+    if (state.selectedAnswer === answer && state.myResult && !state.myResult.correct) {
       return 'incorrect';
+    }
+    if (state.selectedAnswer === answer && state.myResult?.correct) {
+      return 'correct';
     }
     return 'opacity-50';
   };
@@ -104,10 +118,19 @@ function GameContent() {
     return 'text-primary animate-pulse';
   };
 
+  if (!room) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="text-2xl text-white/50 mb-4">Connecting to game...</div>
+        <div className="animate-spin text-4xl">⏳</div>
+      </div>
+    );
+  }
+
   if (!currentQuestion) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-2xl text-white/50">Loading...</div>
+        <div className="text-2xl text-white/50">Loading question...</div>
       </div>
     );
   }
@@ -120,7 +143,7 @@ function GameContent() {
         <div className="text-center mb-8 animate-bounce-in">
           <div className="text-6xl mb-4">⏸️</div>
           <h1 className="text-4xl font-black text-warning mb-2">HALFTIME!</h1>
-          <p className="text-white/60">Round {currentRound} of {totalRounds} complete</p>
+          <p className="text-white/60">Round {currentRound - 1} of {totalRounds} complete</p>
         </div>
 
         {/* Leaderboard */}
@@ -170,58 +193,16 @@ function GameContent() {
           )}
         </div>
 
-        {/* Stats */}
-        <div className="card w-full max-w-sm mb-8">
-          <h3 className="font-bold text-center mb-4">Halftime Stats</h3>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-primary">
-                {currentRound}
-              </div>
-              <div className="text-xs text-white/50">Questions Answered</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary">
-                {totalRounds - currentRound}
-              </div>
-              <div className="text-xs text-white/50">Questions Left</div>
-            </div>
-          </div>
-          <div className="mt-4 text-center">
-            <div className="text-lg font-bold">
-              {Math.abs(teamScores.red - teamScores.blue) < 0.5
-                ? "Neck and neck!"
-                : `${halftimeLeader === 'red' ? 'Red' : 'Blue'} leads by ${Math.floor(Math.abs(teamScores.red - teamScores.blue))} point${Math.floor(Math.abs(teamScores.red - teamScores.blue)) !== 1 ? 's' : ''}`}
-            </div>
-          </div>
-        </div>
-
-        {/* Streaks */}
-        {(streaks.red >= 2 || streaks.blue >= 2) && (
-          <div className="card w-full max-w-sm mb-8 bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/30">
-            <div className="text-center">
-              <span className="text-2xl">🔥</span>
-              <p className="text-sm text-white/70 mt-1">
-                {streaks.red >= streaks.blue
-                  ? `Team Red is on a ${streaks.red}-answer streak!`
-                  : `Team Blue is on a ${streaks.blue}-answer streak!`}
-              </p>
-            </div>
-          </div>
-        )}
-
         {/* Continue Button */}
         <button
           onClick={handleContinueFromHalftime}
           className="btn-primary w-full max-w-sm text-lg animate-pulse"
         >
-          Continue to Round {currentRound + 1} →
+          Continue Playing →
         </button>
 
         {/* Team indicator */}
-        <div className={`fixed bottom-0 left-0 right-0 h-1 ${
-          playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'
-        }`} />
+        <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
       </main>
     );
   }
@@ -239,7 +220,7 @@ function GameContent() {
 
         <div className="text-center">
           <div className={`text-3xl font-black ${getTimerColor()}`}>
-            {timeLeft}
+            {state.showResult ? '✓' : timeLeft}
           </div>
           <div className="text-white/30 text-xs">
             Round {currentRound}/{totalRounds}
@@ -255,12 +236,21 @@ function GameContent() {
       </div>
 
       {/* Progress bar */}
-      <div className="progress-bar mb-6">
+      <div className="progress-bar mb-4">
         <div
           className="progress-bar-fill"
           style={{ width: `${(currentRound / totalRounds) * 100}%` }}
         />
       </div>
+
+      {/* Answer Progress Indicator */}
+      {!state.showResult && state.selectedAnswer && (
+        <div className="text-center mb-4">
+          <p className="text-white/50 text-sm">
+            {state.answeredCount}/{room.players.length} players answered
+          </p>
+        </div>
+      )}
 
       {/* Question Card */}
       <div className="card mb-6 animate-slide-up">
@@ -289,7 +279,7 @@ function GameContent() {
           <button
             key={index}
             onClick={() => handleAnswer(answer)}
-            disabled={state.showResult}
+            disabled={!!state.selectedAnswer}
             className={`answer-btn ${getAnswerClass(answer)}`}
           >
             <div className="flex items-center gap-3">
@@ -302,57 +292,90 @@ function GameContent() {
         ))}
       </div>
 
+      {/* Waiting for answer confirmation */}
+      {state.selectedAnswer && !state.showResult && (
+        <div className="mt-6 text-center">
+          <div className="animate-spin text-4xl mb-2">⏳</div>
+          <p className="text-white/60">Waiting for other players...</p>
+          <p className="text-white/40 text-sm mt-1">
+            {state.answeredCount}/{room.players.length} answered
+          </p>
+        </div>
+      )}
+
       {/* Result Feedback */}
-      {state.showResult && (
+      {state.showResult && roundResults && (
         <div className="mt-6 animate-bounce-in">
-          {state.selectedAnswer === currentQuestion.correctAnswer ? (
-            <div className="card bg-success/10 border-success/30 text-center">
+          {/* My Result */}
+          {state.myResult?.correct ? (
+            <div className="card bg-success/10 border-success/30 text-center mb-4">
               <div className="text-4xl mb-2">🎉</div>
               <h3 className="text-xl font-bold text-success">Correct!</h3>
               <p className="text-white/50 text-sm">
-                +1 point for Team {playerTeam === 'red' ? 'Red' : 'Blue'}
+                +{state.myResult.points.toFixed(1)} points
+                {state.myResult.speedBonus && ' (Speed bonus!)'}
+                {state.myResult.streakBonus && ' (Streak bonus!)'}
               </p>
             </div>
           ) : state.selectedAnswer === '__timeout__' ? (
-            <div className="card bg-warning/10 border-warning/30 text-center">
+            <div className="card bg-warning/10 border-warning/30 text-center mb-4">
               <div className="text-4xl mb-2">⏰</div>
               <h3 className="text-xl font-bold text-warning">Time&apos;s Up!</h3>
               <p className="text-white/50 text-sm">
-                The answer was: {currentQuestion.correctAnswer}
+                The answer was: {roundResults.correctAnswer}
               </p>
             </div>
           ) : (
-            <div className="card bg-primary/10 border-primary/30 text-center">
+            <div className="card bg-primary/10 border-primary/30 text-center mb-4">
               <div className="text-4xl mb-2">😅</div>
               <h3 className="text-xl font-bold text-primary">Not quite!</h3>
               <p className="text-white/50 text-sm">
-                The answer was: {currentQuestion.correctAnswer}
+                The answer was: {roundResults.correctAnswer}
               </p>
             </div>
           )}
 
-          <button
-            onClick={handleNextRound}
-            className="btn-primary w-full mt-4 text-lg"
-          >
-            {currentRound < totalRounds ? 'Next Question →' : 'See Results 🏆'}
-          </button>
+          {/* Who got it right */}
+          <div className="card bg-white/5 mb-4">
+            <h4 className="text-sm font-bold text-white/70 mb-3">Results:</h4>
+            <div className="grid grid-cols-2 gap-2">
+              {roundResults.answers.map((ans) => (
+                <div
+                  key={ans.playerId}
+                  className={`flex items-center gap-2 text-sm ${ans.correct ? 'text-success' : 'text-white/50'}`}
+                >
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${
+                    ans.team === 'red' ? 'bg-team-red/30' : 'bg-team-blue/30'
+                  }`}>
+                    {ans.correct ? '✓' : '✗'}
+                  </span>
+                  <span className="truncate">
+                    {ans.playerName}
+                    {ans.playerId === state.playerId && ' (You)'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Auto-advancing message */}
+          <div className="text-center text-white/50 text-sm">
+            Next question coming up...
+          </div>
         </div>
       )}
 
       {/* Streak Bonus Popup */}
       {showStreakBonus && (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
-          <div className="text-6xl animate-bounce-in">
+          <div className="text-4xl sm:text-6xl animate-bounce-in text-center">
             🔥 STREAK BONUS! 🔥
           </div>
         </div>
       )}
 
       {/* Team indicator */}
-      <div className={`fixed bottom-0 left-0 right-0 h-1 ${
-        playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'
-      }`} />
+      <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
     </main>
   );
 }

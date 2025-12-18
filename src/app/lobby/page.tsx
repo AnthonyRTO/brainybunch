@@ -1,52 +1,74 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useGame } from '@/context/GameContext';
 import { GENRES, Genre } from '@/types/game';
 
 function LobbyContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const code = searchParams.get('code') || '';
-  const { state, setGenre, startGame, addDemoPlayers, joinSession } = useGame();
+  const { state, selectGenre, startGame, isHost, getMyTeam, leaveRoom } = useGame();
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
   const [isStarting, setIsStarting] = useState(false);
 
-  const isOrganizer = state.player?.isOrganizer ?? false;
-  const players = state.session?.players || [];
-  const redTeam = players.filter((p) => p.team === 'red');
-  const blueTeam = players.filter((p) => p.team === 'blue');
+  const room = state.room;
+  const amHost = isHost();
+  const myTeam = getMyTeam();
 
-  // Auto-join if participant
+  // Redirect to home if no room
   useEffect(() => {
-    if (state.player && !state.player.isOrganizer && !state.player.team) {
-      joinSession(code);
+    if (!room && !state.isConnected) {
+      // Give some time to connect
+      const timeout = setTimeout(() => {
+        if (!state.room) {
+          router.push('/');
+        }
+      }, 3000);
+      return () => clearTimeout(timeout);
     }
-  }, [state.player, code, joinSession]);
+  }, [room, state.isConnected, state.room, router]);
 
   // Redirect to game when it starts
   useEffect(() => {
-    if (state.session?.status === 'playing') {
-      router.push(`/game?code=${code}`);
+    if (room?.status === 'playing') {
+      router.push('/game');
     }
-  }, [state.session?.status, code, router]);
+  }, [room?.status, router]);
+
+  // Update selected genre when room genre changes
+  useEffect(() => {
+    if (room?.genre) {
+      setSelectedGenre(room.genre as Genre);
+    }
+  }, [room?.genre]);
 
   const handleGenreSelect = (genre: Genre) => {
     setSelectedGenre(genre);
-    setGenre(genre);
+    selectGenre(genre);
   };
 
-  const handleStartGame = async () => {
-    if (!selectedGenre) return;
+  const handleStartGame = () => {
+    if (!selectedGenre || !room) return;
     setIsStarting(true);
-    await startGame();
-    router.push(`/game?code=${code}`);
+    startGame();
   };
 
-  const handleAddDemoPlayers = () => {
-    addDemoPlayers();
+  const handleLeave = () => {
+    leaveRoom();
+    router.push('/');
   };
+
+  if (!room) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center px-4">
+        <div className="text-2xl text-white/50 mb-4">Connecting to game...</div>
+        <div className="animate-spin text-4xl">⏳</div>
+      </main>
+    );
+  }
+
+  const redTeam = room.teams.red;
+  const blueTeam = room.teams.blue;
 
   return (
     <main className="min-h-screen flex flex-col px-4 py-6 pb-24">
@@ -58,12 +80,12 @@ function LobbyContent() {
 
       {/* Game Code Display */}
       <div className="card text-center mb-6 animate-slide-up">
-        <p className="text-white/50 text-sm mb-2">Share this code:</p>
+        <p className="text-white/50 text-sm mb-2">Share this code with friends:</p>
         <div className="text-4xl font-black tracking-widest text-primary animate-pulse-glow inline-block px-6 py-2 rounded-xl bg-primary/10">
-          {code}
+          {room.code}
         </div>
         <p className="text-white/30 text-xs mt-3">
-          {players.length} player{players.length !== 1 ? 's' : ''} joined
+          {room.players.length}/8 players • Max 4 per team
         </p>
       </div>
 
@@ -74,6 +96,7 @@ function LobbyContent() {
           <div className="flex items-center gap-2 mb-3">
             <div className="w-3 h-3 rounded-full bg-team-red"></div>
             <h3 className="font-bold text-team-red">Team Red</h3>
+            <span className="text-white/30 text-xs ml-auto">{redTeam.length}/4</span>
           </div>
           <div className="space-y-2">
             {redTeam.length === 0 ? (
@@ -82,14 +105,20 @@ function LobbyContent() {
               redTeam.map((player) => (
                 <div
                   key={player.id}
-                  className="flex items-center gap-2 text-sm"
+                  className={`flex items-center gap-2 text-sm ${player.id === state.playerId ? 'font-bold' : ''}`}
                 >
                   <span className="w-6 h-6 rounded-full bg-team-red/20 flex items-center justify-center text-xs">
                     {player.name[0].toUpperCase()}
                   </span>
-                  <span className="text-white/80">{player.name}</span>
-                  {player.isOrganizer && (
+                  <span className="text-white/80">
+                    {player.name}
+                    {player.id === state.playerId && ' (You)'}
+                  </span>
+                  {player.isHost && (
                     <span className="text-xs">👑</span>
+                  )}
+                  {!player.connected && (
+                    <span className="text-xs text-white/30">disconnected</span>
                   )}
                 </div>
               ))
@@ -102,6 +131,7 @@ function LobbyContent() {
           <div className="flex items-center gap-2 mb-3">
             <div className="w-3 h-3 rounded-full bg-team-blue"></div>
             <h3 className="font-bold text-team-blue">Team Blue</h3>
+            <span className="text-white/30 text-xs ml-auto">{blueTeam.length}/4</span>
           </div>
           <div className="space-y-2">
             {blueTeam.length === 0 ? (
@@ -110,14 +140,20 @@ function LobbyContent() {
               blueTeam.map((player) => (
                 <div
                   key={player.id}
-                  className="flex items-center gap-2 text-sm"
+                  className={`flex items-center gap-2 text-sm ${player.id === state.playerId ? 'font-bold' : ''}`}
                 >
                   <span className="w-6 h-6 rounded-full bg-team-blue/20 flex items-center justify-center text-xs">
                     {player.name[0].toUpperCase()}
                   </span>
-                  <span className="text-white/80">{player.name}</span>
-                  {player.isOrganizer && (
+                  <span className="text-white/80">
+                    {player.name}
+                    {player.id === state.playerId && ' (You)'}
+                  </span>
+                  {player.isHost && (
                     <span className="text-xs">👑</span>
+                  )}
+                  {!player.connected && (
+                    <span className="text-xs text-white/30">disconnected</span>
                   )}
                 </div>
               ))
@@ -126,18 +162,8 @@ function LobbyContent() {
         </div>
       </div>
 
-      {/* Demo Button (for testing) */}
-      {isOrganizer && players.length < 3 && (
-        <button
-          onClick={handleAddDemoPlayers}
-          className="text-white/30 text-xs underline mb-4 text-center"
-        >
-          + Add demo players (for testing)
-        </button>
-      )}
-
-      {/* Genre Selection (Organizer only) */}
-      {isOrganizer && (
+      {/* Genre Selection (Host only) */}
+      {amHost && (
         <>
           <h2 className="text-lg font-bold mb-3 text-center">
             Choose a Category
@@ -147,9 +173,7 @@ function LobbyContent() {
               <button
                 key={genre.id}
                 onClick={() => handleGenreSelect(genre.id)}
-                className={`genre-card w-full text-left ${
-                  selectedGenre === genre.id ? 'selected' : ''
-                }`}
+                className={`genre-card w-full text-left ${selectedGenre === genre.id ? 'selected' : ''}`}
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{genre.icon}</span>
@@ -165,29 +189,53 @@ function LobbyContent() {
       )}
 
       {/* Waiting message for participants */}
-      {!isOrganizer && (
+      {!amHost && (
         <div className="card text-center">
           <div className="text-4xl mb-3">⏳</div>
           <h2 className="text-xl font-bold mb-2">
-            You&apos;re on Team {state.player?.team === 'red' ? 'Red 🔴' : 'Blue 🔵'}
+            You&apos;re on Team {myTeam === 'red' ? 'Red 🔴' : 'Blue 🔵'}
           </h2>
-          <p className="text-white/50 text-sm">
-            Waiting for the organizer to start the game...
+          <p className="text-white/50 text-sm mb-4">
+            Waiting for the host to select a category and start...
           </p>
+          {room.genre && (
+            <p className="text-white/70 text-sm">
+              Category: <span className="text-primary font-bold">{GENRES.find(g => g.id === room.genre)?.name || room.genre}</span>
+            </p>
+          )}
         </div>
       )}
 
-      {/* Start Button (Organizer only) */}
-      {isOrganizer && (
+      {/* Leave Button */}
+      <button
+        onClick={handleLeave}
+        className="text-white/40 text-sm underline text-center mt-4"
+      >
+        Leave Game
+      </button>
+
+      {/* Error Display */}
+      {state.error && (
+        <div className="fixed top-4 left-4 right-4 bg-red-500/20 border border-red-500/50 rounded-xl p-4 text-center z-50">
+          <p className="text-red-400">{state.error}</p>
+        </div>
+      )}
+
+      {/* Start Button (Host only) */}
+      {amHost && (
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background to-transparent">
           <button
             onClick={handleStartGame}
-            disabled={!selectedGenre || isStarting}
+            disabled={!selectedGenre || isStarting || room.players.length < 2}
             className="btn-primary w-full text-xl py-5 flex items-center justify-center gap-2"
           >
             {isStarting ? (
               <>
                 <span className="animate-spin">⏳</span> Starting...
+              </>
+            ) : room.players.length < 2 ? (
+              <>
+                👥 Need at least 2 players
               </>
             ) : (
               <>
@@ -201,8 +249,11 @@ function LobbyContent() {
       {/* Countdown Overlay */}
       {state.countdown !== null && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-          <div className="text-9xl font-black text-primary animate-countdown">
-            {state.countdown}
+          <div className="text-center">
+            <div className="text-9xl font-black text-primary animate-countdown mb-4">
+              {state.countdown}
+            </div>
+            <p className="text-white/60 text-xl">Get Ready!</p>
           </div>
         </div>
       )}

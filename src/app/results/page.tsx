@@ -1,21 +1,20 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useGame } from '@/context/GameContext';
 
 function ResultsContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const code = searchParams.get('code') || '';
-  const { state, resetGame } = useGame();
+  const { state, resetGame, getMyTeam } = useGame();
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const teamScores = state.session?.teamScores || { red: 0, blue: 0 };
-  const players = state.session?.players || [];
-  const redTeam = players.filter((p) => p.team === 'red');
-  const blueTeam = players.filter((p) => p.team === 'blue');
+  const room = state.room;
+  const teamScores = room?.scores || { red: 0, blue: 0 };
+  const redTeam = room?.teams.red || [];
+  const blueTeam = room?.teams.blue || [];
+  const playerTeam = getMyTeam();
 
   const winner =
     teamScores.red > teamScores.blue
@@ -24,7 +23,6 @@ function ResultsContent() {
       ? 'blue'
       : 'tie';
 
-  const playerTeam = state.player?.team;
   const isWinner = playerTeam === winner;
 
   useEffect(() => {
@@ -33,15 +31,31 @@ function ResultsContent() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Redirect to home if no room
+  useEffect(() => {
+    if (!room) {
+      const timeout = setTimeout(() => {
+        if (!state.room) {
+          router.push('/');
+        }
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [room, state.room, router]);
+
   const handlePlayAgain = () => {
     resetGame();
     router.push('/');
   };
 
-  const handleRematch = () => {
-    // In a real implementation, this would reset scores but keep players
-    router.push(`/lobby?code=${code}`);
-  };
+  if (!room) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center px-4">
+        <div className="text-2xl text-white/50 mb-4">Loading results...</div>
+        <div className="animate-spin text-4xl">⏳</div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
@@ -110,7 +124,7 @@ function ResultsContent() {
       <div className="grid grid-cols-2 gap-4 w-full max-w-sm mb-8 relative z-10">
         <div
           className={`card text-center ${
-            winner === 'red' ? 'border-team-red bg-team-red/10' : ''
+            winner === 'red' ? 'border-team-red bg-team-red/10 scale-105' : ''
           }`}
         >
           <div className="text-xs text-white/50 uppercase mb-1">Team Red</div>
@@ -122,6 +136,7 @@ function ResultsContent() {
             {redTeam.map((p) => (
               <div key={p.id} className="text-sm text-white/60">
                 {p.name}
+                {p.id === state.playerId && ' (You)'}
               </div>
             ))}
           </div>
@@ -129,7 +144,7 @@ function ResultsContent() {
 
         <div
           className={`card text-center ${
-            winner === 'blue' ? 'border-team-blue bg-team-blue/10' : ''
+            winner === 'blue' ? 'border-team-blue bg-team-blue/10 scale-105' : ''
           }`}
         >
           <div className="text-xs text-white/50 uppercase mb-1">Team Blue</div>
@@ -141,6 +156,7 @@ function ResultsContent() {
             {blueTeam.map((p) => (
               <div key={p.id} className="text-sm text-white/60">
                 {p.name}
+                {p.id === state.playerId && ' (You)'}
               </div>
             ))}
           </div>
@@ -150,12 +166,18 @@ function ResultsContent() {
       {/* Stats */}
       <div className="card w-full max-w-sm mb-8 relative z-10">
         <h3 className="font-bold text-center mb-4">Game Stats</h3>
-        <div className="grid grid-cols-2 gap-4 text-center">
+        <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <div className="text-2xl font-bold text-primary">
-              {state.session?.totalRounds || 20}
+              {room.totalRounds}
             </div>
             <div className="text-xs text-white/50">Questions</div>
+          </div>
+          <div>
+            <div className="text-2xl font-bold text-primary">
+              {room.players.length}
+            </div>
+            <div className="text-xs text-white/50">Players</div>
           </div>
           <div>
             <div className="text-2xl font-bold text-primary">
@@ -168,10 +190,7 @@ function ResultsContent() {
 
       {/* Action Buttons */}
       <div className="w-full max-w-sm space-y-3 relative z-10">
-        <button onClick={handleRematch} className="btn-primary w-full text-lg">
-          🔄 Rematch
-        </button>
-        <button onClick={handlePlayAgain} className="btn-secondary w-full">
+        <button onClick={handlePlayAgain} className="btn-primary w-full text-lg">
           🏠 New Game
         </button>
       </div>

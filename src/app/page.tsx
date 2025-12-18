@@ -5,6 +5,16 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useGame } from '@/context/GameContext';
 
+// Connection indicator component
+function ConnectionStatus({ isConnected }: { isConnected: boolean }) {
+  return (
+    <div className={`fixed top-2 right-2 sm:top-4 sm:right-4 z-50 flex items-center gap-2 px-2 py-1 rounded-full text-xs ${isConnected ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+      <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+      {isConnected ? 'Connected' : 'Connecting...'}
+    </div>
+  );
+}
+
 // Seasonal theme configuration
 type Season = 'holiday' | 'valentine' | 'spring' | 'summer' | 'halloween' | 'fall' | 'default';
 
@@ -73,12 +83,12 @@ const seasonalConfig = {
 
 export default function Home() {
   const router = useRouter();
-  const { createPlayer, createSession } = useGame();
+  const { state, createRoom, joinRoom } = useGame();
   const [name, setName] = useState('');
-  const [role, setRole] = useState<'organizer' | 'participant' | null>(null);
   const [gameCode, setGameCode] = useState('');
   const [step, setStep] = useState<'name' | 'role' | 'code'>('name');
   const [error, setError] = useState('');
+  const [isJoining, setIsJoining] = useState(false);
   const [season, setSeason] = useState<Season>('default');
   const [particles, setParticles] = useState<Array<{ id: number; emoji: string; left: number; delay: number; duration: number }>>([]);
 
@@ -98,6 +108,22 @@ export default function Home() {
     setParticles(newParticles);
   }, []);
 
+  // Navigate to lobby when room is created/joined
+  useEffect(() => {
+    if (state.room && isJoining) {
+      setIsJoining(false);
+      router.push('/lobby');
+    }
+  }, [state.room, isJoining, router]);
+
+  // Show errors from server
+  useEffect(() => {
+    if (state.error) {
+      setError(state.error);
+      setIsJoining(false);
+    }
+  }, [state.error]);
+
   const config = seasonalConfig[season];
 
   const handleNameSubmit = () => {
@@ -110,11 +136,14 @@ export default function Home() {
   };
 
   const handleRoleSelect = (selectedRole: 'organizer' | 'participant') => {
-    setRole(selectedRole);
     if (selectedRole === 'organizer') {
-      createPlayer(name.trim(), true);
-      const code = createSession();
-      router.push(`/lobby?code=${code}`);
+      if (!state.isConnected) {
+        setError('Connecting to server... Please wait.');
+        return;
+      }
+      setIsJoining(true);
+      setError('');
+      createRoom(name.trim());
     } else {
       setStep('code');
     }
@@ -125,12 +154,20 @@ export default function Home() {
       setError('Please enter a valid 6-character code');
       return;
     }
-    createPlayer(name.trim(), false);
-    router.push(`/lobby?code=${gameCode.toUpperCase()}`);
+    if (!state.isConnected) {
+      setError('Connecting to server... Please wait.');
+      return;
+    }
+    setIsJoining(true);
+    setError('');
+    joinRoom(gameCode.toUpperCase(), name.trim());
   };
 
   return (
     <main className={`min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-24 sm:pt-28 pb-8 relative overflow-hidden bg-gradient-to-b ${config.bgGradient}`}>
+      {/* Connection Status */}
+      <ConnectionStatus isConnected={state.isConnected} />
+
       {/* Retro Background Pattern */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10">
         <div className="absolute inset-0 retro-grid"></div>
@@ -257,16 +294,17 @@ export default function Home() {
 
           <button
             onClick={() => handleRoleSelect('organizer')}
-            className="card w-full mb-4 text-left hover:border-primary/50 transition-all active:scale-98"
+            className="card w-full mb-4 text-left hover:border-primary/50 transition-all active:scale-98 disabled:opacity-50"
+            disabled={isJoining}
           >
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center text-3xl">
-                👑
+                {isJoining ? '⏳' : '👑'}
               </div>
               <div>
-                <h3 className="text-xl font-bold">Organizer</h3>
+                <h3 className="text-xl font-bold">{isJoining ? 'Creating Game...' : 'Host a Game'}</h3>
                 <p className="text-white/50 text-sm">
-                  Create a game & invite others
+                  Create a room & invite up to 7 others
                 </p>
               </div>
             </div>
@@ -274,20 +312,25 @@ export default function Home() {
 
           <button
             onClick={() => handleRoleSelect('participant')}
-            className="card w-full text-left hover:border-primary/50 transition-all active:scale-98"
+            className="card w-full text-left hover:border-primary/50 transition-all active:scale-98 disabled:opacity-50"
+            disabled={isJoining}
           >
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-team-blue/20 flex items-center justify-center text-3xl">
                 🎮
               </div>
               <div>
-                <h3 className="text-xl font-bold">Participant</h3>
+                <h3 className="text-xl font-bold">Join a Game</h3>
                 <p className="text-white/50 text-sm">
-                  Join an existing game
+                  Enter a code to join
                 </p>
               </div>
             </div>
           </button>
+
+          {error && (
+            <p className="text-primary text-sm mt-4 text-center">{error}</p>
+          )}
 
           <button
             onClick={() => setStep('name')}
@@ -323,9 +366,9 @@ export default function Home() {
           <button
             onClick={handleJoinGame}
             className="btn-primary w-full text-lg"
-            disabled={gameCode.length !== 6}
+            disabled={gameCode.length !== 6 || isJoining}
           >
-            Join Game
+            {isJoining ? 'Joining...' : 'Join Game'}
           </button>
           <button
             onClick={() => setStep('role')}
