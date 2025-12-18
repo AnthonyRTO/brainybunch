@@ -374,9 +374,15 @@ export default function Home() {
       {/* Footer */}
       <div className="mt-8 sm:mt-12 text-center relative z-10">
         <p className="text-white/30 text-xs sm:text-sm mb-2">Made for family fun!</p>
-        <a href="/terms" className="text-white/40 text-xs hover:text-white/60 underline">
-          Terms and Conditions
-        </a>
+        <div className="flex items-center justify-center gap-3">
+          <a href="/terms" className="text-white/40 text-xs hover:text-white/60 underline">
+            Terms and Conditions
+          </a>
+          <span className="text-white/20">|</span>
+          <a href="mailto:anthony_r78@me.com" className="text-white/40 text-xs hover:text-white/60 underline">
+            Contact Us
+          </a>
+        </div>
       </div>
 
       {/* CSS for retro styling and animations */}
