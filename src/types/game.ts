@@ -58,6 +58,7 @@ export type Genre =
   | 'world_geography'
   | 'family_sitcoms'
   | 'reality_tv'
+  | 'teen_slang'
   | 'mix_it_up';
 
 export interface GenreOption {
@@ -180,6 +181,14 @@ export const GENRES: GenreOption[] = [
     icon: '🌍',
     description: 'Countries, capitals & landmarks!',
     apiCategory: 22,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'teen_slang',
+    name: 'Teen Slang',
+    icon: '🤙',
+    description: 'What does your teen even mean?!',
+    apiCategory: null,
     useCustomQuestions: true,
   },
   {
