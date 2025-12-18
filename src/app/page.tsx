@@ -311,6 +311,44 @@ export default function Home() {
             Hey <span className="text-primary font-bold">{name}</span>! Are you...
           </p>
 
+          {/* Solo Mode Option */}
+          <button
+            onClick={() => {
+              if (!state.isConnected) {
+                setError('Connecting to server... Please wait.');
+                return;
+              }
+              setIsJoining(true);
+              setError('');
+              createRoom(name.trim());
+              // Store solo preference in sessionStorage for lobby to pick up
+              sessionStorage.setItem('brainybunch_solo', 'true');
+            }}
+            className="card w-full mb-4 text-left hover:border-green-500/50 border-green-500/30 bg-green-500/5 transition-all active:scale-98 disabled:opacity-50"
+            disabled={isJoining}
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl">
+                🎯
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-green-400">Just for Me</h3>
+                <p className="text-white/50 text-sm">
+                  Practice solo - test your knowledge!
+                </p>
+              </div>
+            </div>
+          </button>
+
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/10"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <span className="bg-background px-3 text-white/30 text-sm">or play with others</span>
+            </div>
+          </div>
+
           <button
             onClick={() => handleRoleSelect('organizer')}
             className="card w-full mb-4 text-left hover:border-primary/50 transition-all active:scale-98 disabled:opacity-50"

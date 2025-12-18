@@ -16,6 +16,18 @@ function LobbyContent() {
   const amHost = isHost();
   const myTeam = getMyTeam();
 
+  // Check for solo mode preference from home page
+  useEffect(() => {
+    if (room && amHost) {
+      const soloPreference = sessionStorage.getItem('brainybunch_solo');
+      if (soloPreference === 'true') {
+        sessionStorage.removeItem('brainybunch_solo');
+        setSelectedMode('solo');
+        selectMode('solo');
+      }
+    }
+  }, [room, amHost, selectMode]);
+
   // Redirect to home if no room
   useEffect(() => {
     if (!room && !state.isConnected) {
