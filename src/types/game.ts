@@ -32,7 +32,7 @@ export interface GameSession {
     blue: number;
   };
   roundAnswers: {
-    odlayerId: string;
+    playerId: string;
     answer: string;
     timeMs: number;
     correct: boolean;
@@ -44,11 +44,11 @@ export interface GameSession {
 }
 
 export type Genre =
-  | 'pop_culture'
-  | 'sports_games'
-  | 'history_geography'
-  | 'science_nature'
-  | 'wild_card';
+  | 'eighties_music'
+  | 'tv_shows'
+  | 'classic_movies'
+  | 'holiday_movies'
+  | 'mix_it_up';
 
 export interface GenreOption {
   id: Genre;
@@ -56,42 +56,48 @@ export interface GenreOption {
   icon: string;
   description: string;
   apiCategory: number | null; // Open Trivia DB category ID
+  useCustomQuestions: boolean; // Whether to use our curated questions
 }
 
 export const GENRES: GenreOption[] = [
   {
-    id: 'pop_culture',
-    name: 'Pop Culture',
+    id: 'eighties_music',
+    name: "80's Music",
+    icon: '🎸',
+    description: 'Madonna, Michael Jackson, Prince & more!',
+    apiCategory: 12, // Entertainment: Music
+    useCustomQuestions: true,
+  },
+  {
+    id: 'tv_shows',
+    name: "90's/2000's TV",
+    icon: '📺',
+    description: 'Friends, Seinfeld, The Office & more!',
+    apiCategory: 14, // Entertainment: Television
+    useCustomQuestions: true,
+  },
+  {
+    id: 'classic_movies',
+    name: 'Classic Movies',
     icon: '🎬',
-    description: 'Movies, Music, TV & Celebrities',
+    description: 'Timeless films from Hollywood\'s golden era',
     apiCategory: 11, // Entertainment: Film
+    useCustomQuestions: true,
   },
   {
-    id: 'sports_games',
-    name: 'Sports & Games',
-    icon: '⚽',
-    description: 'All sports, board games & video games',
-    apiCategory: 21, // Sports
+    id: 'holiday_movies',
+    name: 'Holiday Movies',
+    icon: '🎄',
+    description: 'Christmas classics & holiday favorites!',
+    apiCategory: 11, // Entertainment: Film
+    useCustomQuestions: true,
   },
   {
-    id: 'history_geography',
-    name: 'History & Geography',
-    icon: '🌍',
-    description: 'World events, places & landmarks',
-    apiCategory: 23, // History
-  },
-  {
-    id: 'science_nature',
-    name: 'Science & Nature',
-    icon: '🔬',
-    description: 'Animals, space & inventions',
-    apiCategory: 17, // Science & Nature
-  },
-  {
-    id: 'wild_card',
-    name: 'Wild Card',
-    icon: '🃏',
-    description: 'Mix of everything!',
-    apiCategory: null, // Random
+    id: 'mix_it_up',
+    name: 'Mix It Up!',
+    icon: '🎲',
+    description: 'A little bit of everything!',
+    apiCategory: null,
+    useCustomQuestions: true,
   },
 ];

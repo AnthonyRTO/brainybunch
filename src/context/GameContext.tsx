@@ -1,7 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, useCallback, useEffect, ReactNode } from 'react';
-import { Player, GameSession, Genre, Question, GENRES } from '@/types/game';
+import React, { createContext, useContext, useReducer, useCallback, ReactNode } from 'react';
+import { Player, GameSession, Genre, Question } from '@/types/game';
+import { getQuestionsForGenre } from '@/data/questions';
 import { nanoid } from 'nanoid';
 
 interface GameState {
@@ -158,7 +159,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           roundAnswers: [
             ...state.session.roundAnswers,
             {
-              odlayerId: state.player.id,
+              playerId: state.player.id,
               answer: action.payload.answer,
               timeMs: action.payload.timeMs,
               correct: isCorrect,
@@ -261,44 +262,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SET_GENRE', payload: genre });
   }, []);
 
-  const fetchQuestions = async (genre: Genre): Promise<Question[]> => {
-    const genreConfig = GENRES.find(g => g.id === genre);
-    const categoryParam = genreConfig?.apiCategory
-      ? `&category=${genreConfig.apiCategory}`
-      : '';
-
-    try {
-      const response = await fetch(
-        `https://opentdb.com/api.php?amount=20&type=multiple${categoryParam}`
-      );
-      const data = await response.json();
-
-      return data.results.map((q: {
-        question: string;
-        correct_answer: string;
-        incorrect_answers: string[];
-        category: string;
-        difficulty: string;
-      }, index: number) => {
-        const allAnswers = [...q.incorrect_answers, q.correct_answer]
-          .sort(() => Math.random() - 0.5);
-
-        return {
-          id: `q-${index}`,
-          question: decodeHTMLEntities(q.question),
-          correctAnswer: decodeHTMLEntities(q.correct_answer),
-          incorrectAnswers: q.incorrect_answers.map(decodeHTMLEntities),
-          allAnswers: allAnswers.map(decodeHTMLEntities),
-          category: q.category,
-          difficulty: q.difficulty as 'easy' | 'medium' | 'hard',
-        };
-      });
-    } catch (error) {
-      console.error('Failed to fetch questions:', error);
-      return getFallbackQuestions();
-    }
-  };
-
   const startGame = useCallback(async () => {
     if (!state.session?.genre) return;
 
@@ -311,7 +274,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
     dispatch({ type: 'SET_COUNTDOWN', payload: null });
 
-    const questions = await fetchQuestions(state.session.genre);
+    // Get curated questions for the selected genre
+    const questions = getQuestionsForGenre(state.session.genre);
     gameSessions.set(state.session.code, { questions, currentIndex: 0 });
     dispatch({ type: 'START_GAME', payload: { questions } });
   }, [state.session?.genre, state.session?.code]);
@@ -389,37 +353,4 @@ export function useGame() {
     throw new Error('useGame must be used within a GameProvider');
   }
   return context;
-}
-
-// Helper to decode HTML entities from API
-function decodeHTMLEntities(text: string): string {
-  const textArea = typeof document !== 'undefined'
-    ? document.createElement('textarea')
-    : null;
-  if (textArea) {
-    textArea.innerHTML = text;
-    return textArea.value;
-  }
-  return text
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
-}
-
-// Fallback questions if API fails
-function getFallbackQuestions(): Question[] {
-  return [
-    {
-      id: 'fallback-1',
-      question: 'What is the capital of France?',
-      correctAnswer: 'Paris',
-      incorrectAnswers: ['London', 'Berlin', 'Madrid'],
-      allAnswers: ['Paris', 'London', 'Berlin', 'Madrid'].sort(() => Math.random() - 0.5),
-      category: 'Geography',
-      difficulty: 'easy',
-    },
-    // Add more fallback questions as needed
-  ];
 }
