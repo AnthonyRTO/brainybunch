@@ -94,6 +94,8 @@ export default function Home() {
   const [season, setSeason] = useState<Season>('default');
   const [particles, setParticles] = useState<Array<{ id: number; emoji: string; left: number; delay: number; duration: number }>>([]);
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
+  const [joiningFromLink, setJoiningFromLink] = useState(false);
+  const [hasSavedName, setHasSavedName] = useState(false);
 
   useEffect(() => {
     const currentSeason = getSeason();
@@ -109,6 +111,26 @@ export default function Home() {
       duration: 8 + Math.random() * 7,
     }));
     setParticles(newParticles);
+
+    // Load saved name from localStorage
+    const savedName = localStorage.getItem('brainybunch_name');
+    if (savedName) {
+      setName(savedName);
+      setHasSavedName(true);
+    }
+
+    // Check for game code in URL (for shareable links)
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeFromUrl = urlParams.get('code');
+    if (codeFromUrl && codeFromUrl.length === 6) {
+      setGameCode(codeFromUrl.toUpperCase());
+      setJoiningFromLink(true);
+      // If we have a saved name, go straight to joining
+      if (savedName) {
+        setName(savedName);
+        setStep('code');
+      }
+    }
 
     // Increment visitor count
     const incrementVisitor = async () => {
@@ -150,8 +172,15 @@ export default function Home() {
       setError('Please enter at least 2 characters');
       return;
     }
+    // Save name to localStorage for future sessions
+    localStorage.setItem('brainybunch_name', name.trim());
     setError('');
-    setStep('role');
+    // If joining from a link, go straight to code entry
+    if (joiningFromLink) {
+      setStep('code');
+    } else {
+      setStep('role');
+    }
   };
 
   const handleRoleSelect = (selectedRole: 'organizer' | 'participant') => {
@@ -160,6 +189,7 @@ export default function Home() {
         setError('Connecting to server... Please wait.');
         return;
       }
+      localStorage.setItem('brainybunch_name', name.trim());
       setIsJoining(true);
       setError('');
       createRoom(name.trim());
@@ -177,6 +207,7 @@ export default function Home() {
       setError('Connecting to server... Please wait.');
       return;
     }
+    localStorage.setItem('brainybunch_name', name.trim());
     setIsJoining(true);
     setError('');
     joinRoom(gameCode.toUpperCase(), name.trim());
@@ -278,8 +309,14 @@ export default function Home() {
       {/* Step 1: Enter Name */}
       {step === 'name' && (
         <div className="card w-full max-w-sm animate-slide-up relative z-10">
+          {joiningFromLink && gameCode && (
+            <div className="bg-primary/10 border border-primary/30 rounded-xl p-3 mb-4 text-center">
+              <p className="text-sm text-white/60">Joining game</p>
+              <p className="text-2xl font-black text-primary tracking-wider">{gameCode}</p>
+            </div>
+          )}
           <h2 className="text-2xl font-bold text-center mb-6">
-            What&apos;s your name?
+            {hasSavedName ? 'Welcome back!' : "What's your name?"}
           </h2>
           <input
             type="text"
@@ -299,7 +336,7 @@ export default function Home() {
             className="btn-primary w-full text-lg"
             disabled={!name.trim()}
           >
-            Continue
+            {joiningFromLink ? 'Join Game' : 'Continue'}
           </button>
         </div>
       )}
@@ -318,6 +355,7 @@ export default function Home() {
                 setError('Connecting to server... Please wait.');
                 return;
               }
+              localStorage.setItem('brainybunch_name', name.trim());
               setIsJoining(true);
               setError('');
               createRoom(name.trim());

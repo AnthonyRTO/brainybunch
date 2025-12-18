@@ -11,6 +11,16 @@ function LobbyContent() {
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
   const [selectedMode, setSelectedMode] = useState<'team' | 'individual' | 'solo'>('team');
   const [isStarting, setIsStarting] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  const copyJoinLink = () => {
+    if (!room) return;
+    const link = `${window.location.origin}?code=${room.code}`;
+    navigator.clipboard.writeText(link).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    });
+  };
 
   const room = state.room;
   const amHost = isHost();
@@ -109,6 +119,16 @@ function LobbyContent() {
         <div className="text-4xl font-black tracking-widest text-primary animate-pulse-glow inline-block px-6 py-2 rounded-xl bg-primary/10">
           {room.code}
         </div>
+        <button
+          onClick={copyJoinLink}
+          className={`mt-3 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            linkCopied
+              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+              : 'bg-white/5 text-white/60 hover:bg-white/10 border border-white/10'
+          }`}
+        >
+          {linkCopied ? '✓ Link Copied!' : '📋 Copy Join Link'}
+        </button>
         <p className="text-white/30 text-xs mt-3">
           {room.players.length}/8 players • Max 4 per team
         </p>
@@ -332,12 +352,15 @@ function LobbyContent() {
 
       {/* Countdown Overlay */}
       {state.countdown !== null && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
           <div className="text-center">
-            <div className="text-9xl font-black text-primary animate-countdown mb-4">
+            <div
+              key={state.countdown}
+              className="text-[12rem] font-black text-primary animate-countdown mb-4 drop-shadow-[0_0_30px_rgba(233,69,96,0.5)]"
+            >
               {state.countdown}
             </div>
-            <p className="text-white/60 text-xl">Get Ready!</p>
+            <p className="text-white/60 text-2xl font-bold">Get Ready!</p>
           </div>
         </div>
       )}
