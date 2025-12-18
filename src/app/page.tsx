@@ -125,11 +125,7 @@ export default function Home() {
     if (codeFromUrl && codeFromUrl.length === 6) {
       setGameCode(codeFromUrl.toUpperCase());
       setJoiningFromLink(true);
-      // If we have a saved name, go straight to joining
-      if (savedName) {
-        setName(savedName);
-        setStep('code');
-      }
+      // Stay on name step - user can join with one click after confirming/entering name
     }
 
     // Increment visitor count
@@ -175,9 +171,14 @@ export default function Home() {
     // Save name to localStorage for future sessions
     localStorage.setItem('brainybunch_name', name.trim());
     setError('');
-    // If joining from a link, go straight to code entry
-    if (joiningFromLink) {
-      setStep('code');
+    // If joining from a link, join directly
+    if (joiningFromLink && gameCode.length === 6) {
+      if (!state.isConnected) {
+        setError('Connecting to server... Please wait.');
+        return;
+      }
+      setIsJoining(true);
+      joinRoom(gameCode.toUpperCase(), name.trim());
     } else {
       setStep('role');
     }
@@ -334,9 +335,9 @@ export default function Home() {
           <button
             onClick={handleNameSubmit}
             className="btn-primary w-full text-lg"
-            disabled={!name.trim()}
+            disabled={!name.trim() || isJoining}
           >
-            {joiningFromLink ? 'Join Game' : 'Continue'}
+            {isJoining ? 'Joining...' : joiningFromLink ? 'Join Game' : 'Continue'}
           </button>
         </div>
       )}
