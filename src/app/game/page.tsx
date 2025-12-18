@@ -21,6 +21,12 @@ function GameContent() {
   const streaks = room?.streaks || { red: 0, blue: 0 };
   const playerTeam = getMyTeam();
   const roundResults = state.roundResults;
+  const isIndividualMode = room?.mode === 'individual';
+
+  // Get sorted players for individual mode leaderboard
+  const sortedPlayers = room?.players
+    ? [...room.players].sort((a, b) => (b.score || 0) - (a.score || 0))
+    : [];
 
   // Timer countdown
   useEffect(() => {
@@ -150,46 +156,76 @@ function GameContent() {
         <div className="w-full max-w-sm mb-8">
           <h2 className="text-center text-xl font-bold mb-4">Leaderboard</h2>
 
-          <div className="grid grid-cols-2 gap-4">
-            {/* Red Team */}
-            <div className={`card text-center ${halftimeLeader === 'red' ? 'border-team-red bg-team-red/10 scale-105' : ''}`}>
-              <div className="text-xs text-white/50 uppercase mb-1">Team Red</div>
-              <div className="text-4xl font-black text-team-red mb-2">
-                {Math.floor(teamScores.red)}
-              </div>
-              {halftimeLeader === 'red' && <span className="text-2xl">👑</span>}
-              <div className="mt-3 space-y-1">
-                {redTeam.map((p) => (
-                  <div key={p.id} className="text-sm text-white/60">
-                    {p.name}
+          {isIndividualMode ? (
+            // Individual mode: show player rankings
+            <div className="space-y-2">
+              {sortedPlayers.map((p, index) => (
+                <div
+                  key={p.id}
+                  className={`card flex items-center gap-3 ${
+                    index === 0 ? 'border-yellow-500 bg-yellow-500/10' : ''
+                  } ${p.id === state.playerId ? 'ring-2 ring-primary' : ''}`}
+                >
+                  <span className="text-2xl">
+                    {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
+                  </span>
+                  <div className="flex-1">
+                    <div className="font-bold">
+                      {p.name}
+                      {p.id === state.playerId && ' (You)'}
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Blue Team */}
-            <div className={`card text-center ${halftimeLeader === 'blue' ? 'border-team-blue bg-team-blue/10 scale-105' : ''}`}>
-              <div className="text-xs text-white/50 uppercase mb-1">Team Blue</div>
-              <div className="text-4xl font-black text-team-blue mb-2">
-                {Math.floor(teamScores.blue)}
-              </div>
-              {halftimeLeader === 'blue' && <span className="text-2xl">👑</span>}
-              <div className="mt-3 space-y-1">
-                {blueTeam.map((p) => (
-                  <div key={p.id} className="text-sm text-white/60">
-                    {p.name}
+                  <div className="text-2xl font-black text-primary">
+                    {Math.floor(p.score || 0)}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            // Team mode: show team scores
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Red Team */}
+                <div className={`card text-center ${halftimeLeader === 'red' ? 'border-team-red bg-team-red/10 scale-105' : ''}`}>
+                  <div className="text-xs text-white/50 uppercase mb-1">Team Red</div>
+                  <div className="text-4xl font-black text-team-red mb-2">
+                    {Math.floor(teamScores.red)}
+                  </div>
+                  {halftimeLeader === 'red' && <span className="text-2xl">👑</span>}
+                  <div className="mt-3 space-y-1">
+                    {redTeam.map((p) => (
+                      <div key={p.id} className="text-sm text-white/60">
+                        {p.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-          {/* Tie indicator */}
-          {halftimeLeader === 'tie' && (
-            <div className="text-center mt-4">
-              <span className="text-2xl">🤝</span>
-              <p className="text-warning font-bold">It&apos;s all tied up!</p>
-            </div>
+                {/* Blue Team */}
+                <div className={`card text-center ${halftimeLeader === 'blue' ? 'border-team-blue bg-team-blue/10 scale-105' : ''}`}>
+                  <div className="text-xs text-white/50 uppercase mb-1">Team Blue</div>
+                  <div className="text-4xl font-black text-team-blue mb-2">
+                    {Math.floor(teamScores.blue)}
+                  </div>
+                  {halftimeLeader === 'blue' && <span className="text-2xl">👑</span>}
+                  <div className="mt-3 space-y-1">
+                    {blueTeam.map((p) => (
+                      <div key={p.id} className="text-sm text-white/60">
+                        {p.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Tie indicator */}
+              {halftimeLeader === 'tie' && (
+                <div className="text-center mt-4">
+                  <span className="text-2xl">🤝</span>
+                  <p className="text-warning font-bold">It&apos;s all tied up!</p>
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -201,8 +237,10 @@ function GameContent() {
           Continue Playing →
         </button>
 
-        {/* Team indicator */}
-        <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
+        {/* Team indicator (only for team mode) */}
+        {!isIndividualMode && (
+          <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
+        )}
       </main>
     );
   }
@@ -211,28 +249,70 @@ function GameContent() {
     <main className="min-h-screen flex flex-col px-4 py-4 pb-6">
       {/* Header with scores */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="score-badge team-red">
-            {Math.floor(teamScores.red)}
-          </span>
-          {streaks.red >= 3 && <span className="text-xs">🔥</span>}
-        </div>
+        {isIndividualMode ? (
+          // Individual mode: show top 3 players
+          <>
+            <div className="flex items-center gap-1">
+              {sortedPlayers.slice(0, 2).map((p, i) => (
+                <span
+                  key={p.id}
+                  className={`text-xs px-2 py-1 rounded-full ${
+                    p.id === state.playerId ? 'bg-primary/30 text-primary' : 'bg-white/10'
+                  }`}
+                >
+                  {i === 0 ? '🥇' : '🥈'} {Math.floor(p.score || 0)}
+                </span>
+              ))}
+            </div>
 
-        <div className="text-center">
-          <div className={`text-3xl font-black ${getTimerColor()}`}>
-            {state.showResult ? '✓' : timeLeft}
-          </div>
-          <div className="text-white/30 text-xs">
-            Round {currentRound}/{totalRounds}
-          </div>
-        </div>
+            <div className="text-center">
+              <div className={`text-3xl font-black ${getTimerColor()}`}>
+                {state.showResult ? '✓' : timeLeft}
+              </div>
+              <div className="text-white/30 text-xs">
+                Round {currentRound}/{totalRounds}
+              </div>
+            </div>
 
-        <div className="flex items-center gap-2">
-          {streaks.blue >= 3 && <span className="text-xs">🔥</span>}
-          <span className="score-badge team-blue">
-            {Math.floor(teamScores.blue)}
-          </span>
-        </div>
+            <div className="flex items-center gap-1">
+              {sortedPlayers.length > 2 && (
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${
+                    sortedPlayers[2].id === state.playerId ? 'bg-primary/30 text-primary' : 'bg-white/10'
+                  }`}
+                >
+                  🥉 {Math.floor(sortedPlayers[2].score || 0)}
+                </span>
+              )}
+            </div>
+          </>
+        ) : (
+          // Team mode: show team scores
+          <>
+            <div className="flex items-center gap-2">
+              <span className="score-badge team-red">
+                {Math.floor(teamScores.red)}
+              </span>
+              {streaks.red >= 3 && <span className="text-xs">🔥</span>}
+            </div>
+
+            <div className="text-center">
+              <div className={`text-3xl font-black ${getTimerColor()}`}>
+                {state.showResult ? '✓' : timeLeft}
+              </div>
+              <div className="text-white/30 text-xs">
+                Round {currentRound}/{totalRounds}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {streaks.blue >= 3 && <span className="text-xs">🔥</span>}
+              <span className="score-badge team-blue">
+                {Math.floor(teamScores.blue)}
+              </span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Progress bar */}
@@ -374,8 +454,10 @@ function GameContent() {
         </div>
       )}
 
-      {/* Team indicator */}
-      <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
+      {/* Team indicator (only for team mode) */}
+      {!isIndividualMode && (
+        <div className={`fixed bottom-0 left-0 right-0 h-1 ${playerTeam === 'red' ? 'bg-team-red' : 'bg-team-blue'}`} />
+      )}
     </main>
   );
 }

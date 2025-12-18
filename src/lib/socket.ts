@@ -37,6 +37,7 @@ export interface Player {
   team: 'red' | 'blue';
   isHost: boolean;
   connected: boolean;
+  score: number;
 }
 
 export interface RoomState {
@@ -48,10 +49,12 @@ export interface RoomState {
     blue: Player[];
   };
   genre: string | null;
+  mode: 'team' | 'individual';
   status: 'lobby' | 'playing' | 'finished';
   currentRound: number;
   totalRounds: number;
   scores: { red: number; blue: number };
+  playerScores: { [playerId: string]: number };
   streaks: { red: number; blue: number };
 }
 
@@ -77,7 +80,9 @@ export interface RoundResults {
   correctAnswer: string;
   answers: AnswerResult[];
   scores: { red: number; blue: number };
+  playerScores: { [playerId: string]: number };
   streaks: { red: number; blue: number };
+  mode: 'team' | 'individual';
 }
 
 // Event types
@@ -87,6 +92,7 @@ export interface ServerToClientEvents {
   'player-joined': (data: { room: RoomState }) => void;
   'player-left': (data: { room: RoomState }) => void;
   'genre-selected': (data: { room: RoomState }) => void;
+  'mode-selected': (data: { room: RoomState }) => void;
   'game-starting': (data: { countdown: number }) => void;
   'game-started': (data: { room: RoomState; question: Question }) => void;
   'answer-received': (data: { correct: boolean; points: number; speedBonus: boolean; streakBonus: boolean }) => void;
@@ -101,6 +107,7 @@ export interface ClientToServerEvents {
   'create-room': (data: { playerName: string }) => void;
   'join-room': (data: { roomCode: string; playerName: string }) => void;
   'select-genre': (data: { roomCode: string; genre: string }) => void;
+  'select-mode': (data: { roomCode: string; mode: 'team' | 'individual' }) => void;
   'start-game': (data: { roomCode: string }) => void;
   'submit-answer': (data: { roomCode: string; answer: string; timeMs: number }) => void;
 }

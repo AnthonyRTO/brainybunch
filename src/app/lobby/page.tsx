@@ -7,8 +7,9 @@ import { GENRES, Genre } from '@/types/game';
 
 function LobbyContent() {
   const router = useRouter();
-  const { state, selectGenre, startGame, isHost, getMyTeam, leaveRoom } = useGame();
+  const { state, selectGenre, selectMode, startGame, isHost, getMyTeam, leaveRoom } = useGame();
   const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
+  const [selectedMode, setSelectedMode] = useState<'team' | 'individual'>('team');
   const [isStarting, setIsStarting] = useState(false);
 
   const room = state.room;
@@ -42,9 +43,21 @@ function LobbyContent() {
     }
   }, [room?.genre]);
 
+  // Update selected mode when room mode changes
+  useEffect(() => {
+    if (room?.mode) {
+      setSelectedMode(room.mode);
+    }
+  }, [room?.mode]);
+
   const handleGenreSelect = (genre: Genre) => {
     setSelectedGenre(genre);
     selectGenre(genre);
+  };
+
+  const handleModeSelect = (mode: 'team' | 'individual') => {
+    setSelectedMode(mode);
+    selectMode(mode);
   };
 
   const handleStartGame = () => {
@@ -162,6 +175,41 @@ function LobbyContent() {
         </div>
       </div>
 
+      {/* Mode Selection (Host only) */}
+      {amHost && (
+        <>
+          <h2 className="text-lg font-bold mb-3 text-center">
+            Game Mode
+          </h2>
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            <button
+              onClick={() => handleModeSelect('team')}
+              className={`card text-center transition-all ${
+                selectedMode === 'team'
+                  ? 'border-primary bg-primary/20 scale-105'
+                  : 'hover:bg-white/5'
+              }`}
+            >
+              <div className="text-3xl mb-2">👥</div>
+              <h3 className="font-bold">Team</h3>
+              <p className="text-white/50 text-xs">Red vs Blue</p>
+            </button>
+            <button
+              onClick={() => handleModeSelect('individual')}
+              className={`card text-center transition-all ${
+                selectedMode === 'individual'
+                  ? 'border-primary bg-primary/20 scale-105'
+                  : 'hover:bg-white/5'
+              }`}
+            >
+              <div className="text-3xl mb-2">🏆</div>
+              <h3 className="font-bold">Individual</h3>
+              <p className="text-white/50 text-xs">Free for all</p>
+            </button>
+          </div>
+        </>
+      )}
+
       {/* Genre Selection (Host only) */}
       {amHost && (
         <>
@@ -193,16 +241,26 @@ function LobbyContent() {
         <div className="card text-center">
           <div className="text-4xl mb-3">⏳</div>
           <h2 className="text-xl font-bold mb-2">
-            You&apos;re on Team {myTeam === 'red' ? 'Red 🔴' : 'Blue 🔵'}
+            {room.mode === 'individual'
+              ? 'Individual Mode'
+              : `You're on Team ${myTeam === 'red' ? 'Red 🔴' : 'Blue 🔵'}`
+            }
           </h2>
           <p className="text-white/50 text-sm mb-4">
             Waiting for the host to select a category and start...
           </p>
-          {room.genre && (
-            <p className="text-white/70 text-sm">
-              Category: <span className="text-primary font-bold">{GENRES.find(g => g.id === room.genre)?.name || room.genre}</span>
-            </p>
-          )}
+          <div className="space-y-2">
+            {room.mode && (
+              <p className="text-white/70 text-sm">
+                Mode: <span className="text-primary font-bold">{room.mode === 'team' ? '👥 Team' : '🏆 Individual'}</span>
+              </p>
+            )}
+            {room.genre && (
+              <p className="text-white/70 text-sm">
+                Category: <span className="text-primary font-bold">{GENRES.find(g => g.id === room.genre)?.name || room.genre}</span>
+              </p>
+            )}
+          </div>
         </div>
       )}
 

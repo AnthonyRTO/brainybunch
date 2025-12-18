@@ -125,6 +125,7 @@ interface GameContextType {
   createRoom: (playerName: string) => void;
   joinRoom: (roomCode: string, playerName: string) => void;
   selectGenre: (genre: Genre) => void;
+  selectMode: (mode: 'team' | 'individual') => void;
   startGame: () => void;
   submitAnswer: (answer: string) => void;
   leaveRoom: () => void;
@@ -175,6 +176,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
     });
 
     socket.on('genre-selected', ({ room }) => {
+      dispatch({ type: 'SET_ROOM', payload: room });
+    });
+
+    socket.on('mode-selected', ({ room }) => {
       dispatch({ type: 'SET_ROOM', payload: room });
     });
 
@@ -237,6 +242,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
     socket.emit('select-genre', { roomCode: state.room.code, genre });
   }, [state.room]);
 
+  const selectMode = useCallback((mode: 'team' | 'individual') => {
+    if (!state.room) return;
+    const socket = getSocket();
+    socket.emit('select-mode', { roomCode: state.room.code, mode });
+  }, [state.room]);
+
   const startGame = useCallback(() => {
     if (!state.room) return;
     const socket = getSocket();
@@ -285,6 +296,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         createRoom,
         joinRoom,
         selectGenre,
+        selectMode,
         startGame,
         submitAnswer,
         leaveRoom,

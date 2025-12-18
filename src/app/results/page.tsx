@@ -15,15 +15,24 @@ function ResultsContent() {
   const redTeam = room?.teams.red || [];
   const blueTeam = room?.teams.blue || [];
   const playerTeam = getMyTeam();
+  const isIndividualMode = room?.mode === 'individual';
 
-  const winner =
+  // Get sorted players for individual mode
+  const sortedPlayers = room?.players
+    ? [...room.players].sort((a, b) => (b.score || 0) - (a.score || 0))
+    : [];
+
+  // Determine winner
+  const teamWinner =
     teamScores.red > teamScores.blue
       ? 'red'
       : teamScores.blue > teamScores.red
       ? 'blue'
       : 'tie';
 
-  const isWinner = playerTeam === winner;
+  const individualWinner = sortedPlayers.length > 0 ? sortedPlayers[0] : null;
+  const isIndividualWinner = individualWinner?.id === state.playerId;
+  const isTeamWinner = playerTeam === teamWinner;
 
   useEffect(() => {
     setShowConfetti(true);
@@ -93,7 +102,20 @@ function ResultsContent() {
 
       {/* Winner Announcement */}
       <div className="text-center mb-8 animate-bounce-in relative z-10">
-        {winner === 'tie' ? (
+        {isIndividualMode ? (
+          // Individual mode winner
+          <>
+            <div className="text-6xl mb-4">🏆</div>
+            <h1 className="text-4xl font-black text-primary mb-2">
+              {individualWinner?.name} Wins!
+            </h1>
+            {isIndividualWinner ? (
+              <p className="text-success text-lg">Congratulations, you won!</p>
+            ) : (
+              <p className="text-white/60">Great effort! Better luck next time!</p>
+            )}
+          </>
+        ) : teamWinner === 'tie' ? (
           <>
             <div className="text-6xl mb-4">🤝</div>
             <h1 className="text-4xl font-black text-warning mb-2">
@@ -106,12 +128,12 @@ function ResultsContent() {
             <div className="text-6xl mb-4">🏆</div>
             <h1
               className={`text-4xl font-black mb-2 ${
-                winner === 'red' ? 'text-team-red' : 'text-team-blue'
+                teamWinner === 'red' ? 'text-team-red' : 'text-team-blue'
               }`}
             >
-              Team {winner === 'red' ? 'Red' : 'Blue'} Wins!
+              Team {teamWinner === 'red' ? 'Red' : 'Blue'} Wins!
             </h1>
-            {isWinner ? (
+            {isTeamWinner ? (
               <p className="text-success text-lg">Congratulations, you won!</p>
             ) : (
               <p className="text-white/60">Great effort! Better luck next time!</p>
@@ -121,47 +143,75 @@ function ResultsContent() {
       </div>
 
       {/* Final Scores */}
-      <div className="grid grid-cols-2 gap-4 w-full max-w-sm mb-8 relative z-10">
-        <div
-          className={`card text-center ${
-            winner === 'red' ? 'border-team-red bg-team-red/10 scale-105' : ''
-          }`}
-        >
-          <div className="text-xs text-white/50 uppercase mb-1">Team Red</div>
-          <div className="text-4xl font-black text-team-red mb-2">
-            {Math.floor(teamScores.red)}
-          </div>
-          {winner === 'red' && <span className="text-2xl">👑</span>}
-          <div className="mt-3 space-y-1">
-            {redTeam.map((p) => (
-              <div key={p.id} className="text-sm text-white/60">
-                {p.name}
-                {p.id === state.playerId && ' (You)'}
+      {isIndividualMode ? (
+        // Individual mode: show player rankings
+        <div className="w-full max-w-sm mb-8 relative z-10 space-y-2">
+          {sortedPlayers.map((p, index) => (
+            <div
+              key={p.id}
+              className={`card flex items-center gap-3 ${
+                index === 0 ? 'border-yellow-500 bg-yellow-500/10' : ''
+              } ${p.id === state.playerId ? 'ring-2 ring-primary' : ''}`}
+            >
+              <span className="text-2xl">
+                {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`}
+              </span>
+              <div className="flex-1">
+                <div className="font-bold">
+                  {p.name}
+                  {p.id === state.playerId && ' (You)'}
+                </div>
               </div>
-            ))}
-          </div>
+              <div className="text-2xl font-black text-primary">
+                {Math.floor(p.score || 0)}
+              </div>
+            </div>
+          ))}
         </div>
+      ) : (
+        // Team mode: show team scores
+        <div className="grid grid-cols-2 gap-4 w-full max-w-sm mb-8 relative z-10">
+          <div
+            className={`card text-center ${
+              teamWinner === 'red' ? 'border-team-red bg-team-red/10 scale-105' : ''
+            }`}
+          >
+            <div className="text-xs text-white/50 uppercase mb-1">Team Red</div>
+            <div className="text-4xl font-black text-team-red mb-2">
+              {Math.floor(teamScores.red)}
+            </div>
+            {teamWinner === 'red' && <span className="text-2xl">👑</span>}
+            <div className="mt-3 space-y-1">
+              {redTeam.map((p) => (
+                <div key={p.id} className="text-sm text-white/60">
+                  {p.name}
+                  {p.id === state.playerId && ' (You)'}
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <div
-          className={`card text-center ${
-            winner === 'blue' ? 'border-team-blue bg-team-blue/10 scale-105' : ''
-          }`}
-        >
-          <div className="text-xs text-white/50 uppercase mb-1">Team Blue</div>
-          <div className="text-4xl font-black text-team-blue mb-2">
-            {Math.floor(teamScores.blue)}
-          </div>
-          {winner === 'blue' && <span className="text-2xl">👑</span>}
-          <div className="mt-3 space-y-1">
-            {blueTeam.map((p) => (
-              <div key={p.id} className="text-sm text-white/60">
-                {p.name}
-                {p.id === state.playerId && ' (You)'}
-              </div>
-            ))}
+          <div
+            className={`card text-center ${
+              teamWinner === 'blue' ? 'border-team-blue bg-team-blue/10 scale-105' : ''
+            }`}
+          >
+            <div className="text-xs text-white/50 uppercase mb-1">Team Blue</div>
+            <div className="text-4xl font-black text-team-blue mb-2">
+              {Math.floor(teamScores.blue)}
+            </div>
+            {teamWinner === 'blue' && <span className="text-2xl">👑</span>}
+            <div className="mt-3 space-y-1">
+              {blueTeam.map((p) => (
+                <div key={p.id} className="text-sm text-white/60">
+                  {p.name}
+                  {p.id === state.playerId && ' (You)'}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Stats */}
       <div className="card w-full max-w-sm mb-8 relative z-10">
@@ -181,7 +231,10 @@ function ResultsContent() {
           </div>
           <div>
             <div className="text-2xl font-bold text-primary">
-              {Math.floor(teamScores.red + teamScores.blue)}
+              {isIndividualMode
+                ? Math.floor(sortedPlayers.reduce((sum, p) => sum + (p.score || 0), 0))
+                : Math.floor(teamScores.red + teamScores.blue)
+              }
             </div>
             <div className="text-xs text-white/50">Total Points</div>
           </div>

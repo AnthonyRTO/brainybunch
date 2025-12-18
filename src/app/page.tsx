@@ -81,6 +81,8 @@ const seasonalConfig = {
   },
 };
 
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'https://brainy-bunch-api-cebf4a66a4aa.herokuapp.com';
+
 export default function Home() {
   const router = useRouter();
   const { state, createRoom, joinRoom } = useGame();
@@ -91,6 +93,7 @@ export default function Home() {
   const [isJoining, setIsJoining] = useState(false);
   const [season, setSeason] = useState<Season>('default');
   const [particles, setParticles] = useState<Array<{ id: number; emoji: string; left: number; delay: number; duration: number }>>([]);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
   useEffect(() => {
     const currentSeason = getSeason();
@@ -106,6 +109,22 @@ export default function Home() {
       duration: 8 + Math.random() * 7,
     }));
     setParticles(newParticles);
+
+    // Increment visitor count
+    const incrementVisitor = async () => {
+      try {
+        const response = await fetch(`${SOCKET_URL}/visitors/increment`, {
+          method: 'POST',
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setVisitorCount(data.count);
+        }
+      } catch (err) {
+        console.log('Could not update visitor count');
+      }
+    };
+    incrementVisitor();
   }, []);
 
   // Navigate to lobby when room is created/joined
@@ -417,6 +436,11 @@ export default function Home() {
       {/* Footer */}
       <div className="mt-8 sm:mt-12 text-center relative z-10">
         <p className="text-white/30 text-xs sm:text-sm mb-2">Made for family fun!</p>
+        {visitorCount !== null && (
+          <p className="text-white/40 text-xs mb-2">
+            <span className="text-primary">{visitorCount.toLocaleString()}</span> visitors
+          </p>
+        )}
         <div className="flex items-center justify-center gap-3">
           <a href="/terms" className="text-white/40 text-xs hover:text-white/60 underline">
             Terms and Conditions
