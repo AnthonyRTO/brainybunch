@@ -352,19 +352,10 @@ export default function Home() {
           {/* Solo Mode Option */}
           <button
             onClick={() => {
-              if (!state.isConnected) {
-                setError('Connecting to server... Please wait.');
-                return;
-              }
               localStorage.setItem('brainybunch_name', name.trim());
-              setIsJoining(true);
-              setError('');
-              createRoom(name.trim());
-              // Store solo preference in sessionStorage for lobby to pick up
-              sessionStorage.setItem('brainybunch_solo', 'true');
+              router.push('/solo');
             }}
-            className="card w-full mb-4 text-left hover:border-green-500/50 border-green-500/30 bg-green-500/5 transition-all active:scale-98 disabled:opacity-50"
-            disabled={isJoining}
+            className="card w-full mb-4 text-left hover:border-green-500/50 border-green-500/30 bg-green-500/5 transition-all active:scale-98"
           >
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl">

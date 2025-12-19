@@ -26,17 +26,6 @@ function LobbyContent() {
   const amHost = isHost();
   const myTeam = getMyTeam();
 
-  // Check for solo mode preference from home page
-  useEffect(() => {
-    if (room && amHost) {
-      const soloPreference = sessionStorage.getItem('brainybunch_solo');
-      if (soloPreference === 'true') {
-        sessionStorage.removeItem('brainybunch_solo');
-        setSelectedMode('solo');
-        selectMode('solo');
-      }
-    }
-  }, [room, amHost, selectMode]);
 
   // Redirect to home if no room
   useEffect(() => {
@@ -213,18 +202,18 @@ function LobbyContent() {
           <h2 className="text-lg font-bold mb-3 text-center">
             Game Mode
           </h2>
-          <div className="grid grid-cols-3 gap-2 mb-6">
+          <div className="grid grid-cols-2 gap-3 mb-6">
             <button
-              onClick={() => handleModeSelect('solo')}
+              onClick={() => handleModeSelect('team')}
               className={`card text-center transition-all ${
-                selectedMode === 'solo'
+                selectedMode === 'team'
                   ? 'border-primary bg-primary/20 scale-105'
                   : 'hover:bg-white/5'
               }`}
             >
-              <div className="text-2xl mb-1">🎯</div>
-              <h3 className="font-bold text-sm">Solo</h3>
-              <p className="text-white/50 text-xs">Just you</p>
+              <div className="text-2xl mb-1">👥</div>
+              <h3 className="font-bold text-sm">Team Mode</h3>
+              <p className="text-white/50 text-xs">Red vs Blue</p>
             </button>
             <button
               onClick={() => handleModeSelect('individual')}
@@ -235,20 +224,8 @@ function LobbyContent() {
               }`}
             >
               <div className="text-2xl mb-1">🏆</div>
-              <h3 className="font-bold text-sm">Individual</h3>
-              <p className="text-white/50 text-xs">Free for all</p>
-            </button>
-            <button
-              onClick={() => handleModeSelect('team')}
-              className={`card text-center transition-all ${
-                selectedMode === 'team'
-                  ? 'border-primary bg-primary/20 scale-105'
-                  : 'hover:bg-white/5'
-              }`}
-            >
-              <div className="text-2xl mb-1">👥</div>
-              <h3 className="font-bold text-sm">Team</h3>
-              <p className="text-white/50 text-xs">Red vs Blue</p>
+              <h3 className="font-bold text-sm">Free for All</h3>
+              <p className="text-white/50 text-xs">Everyone for themselves</p>
             </button>
           </div>
         </>
@@ -285,8 +262,8 @@ function LobbyContent() {
         <div className="card text-center">
           <div className="text-4xl mb-3">⏳</div>
           <h2 className="text-xl font-bold mb-2">
-            {room.mode === 'individual' || room.mode === 'solo'
-              ? room.mode === 'solo' ? 'Solo Mode' : 'Individual Mode'
+            {room.mode === 'individual'
+              ? 'Free for All Mode'
               : `You're on Team ${myTeam === 'red' ? 'Red 🔴' : 'Blue 🔵'}`
             }
           </h2>
@@ -297,7 +274,7 @@ function LobbyContent() {
             {room.mode && (
               <p className="text-white/70 text-sm">
                 Mode: <span className="text-primary font-bold">
-                  {room.mode === 'team' ? '👥 Team' : room.mode === 'solo' ? '🎯 Solo' : '🏆 Individual'}
+                  {room.mode === 'team' ? '👥 Team' : '🏆 Free for All'}
                 </span>
               </p>
             )}
@@ -330,14 +307,14 @@ function LobbyContent() {
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background to-transparent">
           <button
             onClick={handleStartGame}
-            disabled={!selectedGenre || isStarting || (selectedMode !== 'solo' && room.players.length < 2)}
+            disabled={!selectedGenre || isStarting || room.players.length < 2}
             className="btn-primary w-full text-xl py-5 flex items-center justify-center gap-2"
           >
             {isStarting ? (
               <>
                 <span className="animate-spin">⏳</span> Starting...
               </>
-            ) : selectedMode !== 'solo' && room.players.length < 2 ? (
+            ) : room.players.length < 2 ? (
               <>
                 👥 Need at least 2 players
               </>
