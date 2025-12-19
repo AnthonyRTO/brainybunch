@@ -59,6 +59,8 @@ export type Genre =
   | 'family_sitcoms'
   | 'reality_tv'
   | 'teen_slang'
+  | 'greek_mythology'
+  | 'cyprus_knowledge'
   | 'mix_it_up';
 
 export interface GenreOption {
@@ -188,6 +190,22 @@ export const GENRES: GenreOption[] = [
     name: 'Teen Slang',
     icon: '🤙',
     description: 'What does your teen even mean?!',
+    apiCategory: null,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'greek_mythology',
+    name: 'Greek Mythology',
+    icon: '⚡',
+    description: 'Gods, heroes, and ancient legends!',
+    apiCategory: null,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'cyprus_knowledge',
+    name: 'Cyprus Knowledge',
+    icon: '🇨🇾',
+    description: 'The beautiful island of Aphrodite!',
     apiCategory: null,
     useCustomQuestions: true,
   },
