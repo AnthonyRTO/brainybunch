@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import { GameProvider } from "@/context/GameContext";
 
@@ -70,6 +71,7 @@ export default function RootLayout({
         <GameProvider>
           {children}
         </GameProvider>
+        <Analytics />
       </body>
     </html>
   );
