@@ -12,8 +12,9 @@ function ResultsContent() {
 
   const room = state.room;
   const teamScores = room?.scores || { red: 0, blue: 0 };
-  const redTeam = room?.teams.red || [];
-  const blueTeam = room?.teams.blue || [];
+  // Sort team members by score (highest first)
+  const redTeam = [...(room?.teams.red || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
+  const blueTeam = [...(room?.teams.blue || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
   const playerTeam = getMyTeam();
   const isIndividualMode = room?.mode === 'individual';
   const isSoloMode = room?.mode === 'solo';
@@ -219,11 +220,22 @@ function ResultsContent() {
               {Math.floor(teamScores.red)}
             </div>
             {teamWinner === 'red' && <span className="text-2xl">👑</span>}
-            <div className="mt-3 space-y-1">
-              {redTeam.map((p) => (
-                <div key={p.id} className="text-sm text-white/60">
-                  {p.name}
-                  {p.id === state.playerId && ' (You)'}
+            <div className="mt-3 space-y-1.5">
+              {redTeam.map((p, index) => (
+                <div
+                  key={p.id}
+                  className={`flex items-center justify-between text-sm px-2 py-1 rounded ${
+                    p.id === state.playerId ? 'bg-white/10 font-medium' : ''
+                  }`}
+                >
+                  <span className="text-white/80 truncate">
+                    {index === 0 && redTeam.length > 1 && '⭐ '}
+                    {p.name}
+                    {p.id === state.playerId && ' (You)'}
+                  </span>
+                  <span className="text-team-red font-bold ml-2">
+                    {Math.floor(p.score || 0)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -239,11 +251,22 @@ function ResultsContent() {
               {Math.floor(teamScores.blue)}
             </div>
             {teamWinner === 'blue' && <span className="text-2xl">👑</span>}
-            <div className="mt-3 space-y-1">
-              {blueTeam.map((p) => (
-                <div key={p.id} className="text-sm text-white/60">
-                  {p.name}
-                  {p.id === state.playerId && ' (You)'}
+            <div className="mt-3 space-y-1.5">
+              {blueTeam.map((p, index) => (
+                <div
+                  key={p.id}
+                  className={`flex items-center justify-between text-sm px-2 py-1 rounded ${
+                    p.id === state.playerId ? 'bg-white/10 font-medium' : ''
+                  }`}
+                >
+                  <span className="text-white/80 truncate">
+                    {index === 0 && blueTeam.length > 1 && '⭐ '}
+                    {p.name}
+                    {p.id === state.playerId && ' (You)'}
+                  </span>
+                  <span className="text-team-blue font-bold ml-2">
+                    {Math.floor(p.score || 0)}
+                  </span>
                 </div>
               ))}
             </div>
