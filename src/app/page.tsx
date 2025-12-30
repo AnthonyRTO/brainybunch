@@ -391,7 +391,7 @@ export default function Home() {
       {step === 'role' && (
         <div className="w-full max-w-sm animate-slide-up relative z-10">
           <p className="text-center text-white/60 mb-6">
-            Hey <span className="text-primary font-bold">{name}</span>! Are you...
+            Hey <span className="text-primary font-bold">{name}</span>! Choose how to play...
           </p>
 
           {/* Solo Mode Option */}
