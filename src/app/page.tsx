@@ -31,11 +31,11 @@ function getSeason(): Season {
 
 const seasonalConfig = {
   holiday: {
-    emoji: '🎄',
+    emoji: '🎉',
     greeting: 'Happy Holidays!',
-    particles: ['❄️', '🎄', '⭐', '🎁', '❄️', '✨'],
-    accentColor: 'text-green-500',
-    bgGradient: 'from-red-900/20 via-transparent to-green-900/20',
+    particles: ['🎆', '🥂', '🎊', '✨', '🍾', '⭐', '🎇', '💫'],
+    accentColor: 'text-yellow-400',
+    bgGradient: 'from-purple-900/20 via-transparent to-yellow-900/20',
   },
   valentine: {
     emoji: '💕',
@@ -95,6 +95,7 @@ export default function Home() {
   const [particles, setParticles] = useState<Array<{ id: number; emoji: string; left: number; delay: number; duration: number }>>([]);
   const [joiningFromLink, setJoiningFromLink] = useState(false);
   const [hasSavedName, setHasSavedName] = useState(false);
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
     const currentSeason = getSeason();
@@ -128,6 +129,36 @@ export default function Home() {
     }
 
   }, []);
+
+  // New Year's countdown timer
+  useEffect(() => {
+    if (season !== 'holiday') return;
+
+    const calculateCountdown = () => {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      // Target: Jan 1st of next year at midnight
+      const newYear = new Date(currentYear + 1, 0, 1, 0, 0, 0);
+      const diff = newYear.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setCountdown({ days, hours, minutes, seconds });
+    };
+
+    calculateCountdown();
+    const interval = setInterval(calculateCountdown, 1000);
+
+    return () => clearInterval(interval);
+  }, [season]);
 
   // Navigate to lobby when room is created/joined
   useEffect(() => {
@@ -199,7 +230,7 @@ export default function Home() {
   };
 
   return (
-    <main className={`min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-24 sm:pt-28 pb-8 relative overflow-hidden bg-gradient-to-b ${config.bgGradient}`}>
+    <main className={`min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-32 sm:pt-36 pb-8 relative overflow-hidden bg-gradient-to-b ${config.bgGradient}`}>
       {/* Connection Status */}
       <ConnectionStatus isConnected={state.isConnected} />
 
@@ -237,26 +268,56 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Fun Facts Ticker - Holiday Edition */}
+      {/* New Year's Countdown */}
       {season === 'holiday' && (
-        <div className="fixed top-11 sm:top-14 left-0 right-0 z-20 bg-black/60 py-1.5 sm:py-2 overflow-hidden">
+        <div className="fixed top-11 sm:top-14 left-0 right-0 z-20 countdown-banner py-2 sm:py-3">
+          <div className="flex flex-col items-center">
+            <p className="text-xs sm:text-sm text-white/70 mb-1">Countdown to 2026</p>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="countdown-item">
+                <span className="countdown-number">{countdown.days}</span>
+                <span className="countdown-label">Days</span>
+              </div>
+              <span className="text-yellow-400 text-xl sm:text-2xl font-bold">:</span>
+              <div className="countdown-item">
+                <span className="countdown-number">{String(countdown.hours).padStart(2, '0')}</span>
+                <span className="countdown-label">Hours</span>
+              </div>
+              <span className="text-yellow-400 text-xl sm:text-2xl font-bold">:</span>
+              <div className="countdown-item">
+                <span className="countdown-number">{String(countdown.minutes).padStart(2, '0')}</span>
+                <span className="countdown-label">Mins</span>
+              </div>
+              <span className="text-yellow-400 text-xl sm:text-2xl font-bold">:</span>
+              <div className="countdown-item">
+                <span className="countdown-number">{String(countdown.seconds).padStart(2, '0')}</span>
+                <span className="countdown-label">Secs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fun Facts Ticker - New Year's Edition */}
+      {season === 'holiday' && (
+        <div className="fixed top-[5.5rem] sm:top-[6.5rem] left-0 right-0 z-20 bg-black/60 py-1.5 sm:py-2 overflow-hidden">
           <div className="ticker-wrapper">
             <div className="ticker-content">
-              <span className="ticker-item">🎬 Is Die Hard a Christmas movie? The debate continues! 🎄</span>
-              <span className="ticker-item">🎅 &quot;Home Alone&quot; was filmed in just 3 months!</span>
-              <span className="ticker-item">❄️ &quot;It&apos;s a Wonderful Life&quot; was a box office flop when first released</span>
-              <span className="ticker-item">🦌 Rudolph was created for a Montgomery Ward coloring book in 1939</span>
-              <span className="ticker-item">🎄 &quot;Elf&quot; took 3 years to make due to Will Ferrell&apos;s schedule</span>
-              <span className="ticker-item">🎬 &quot;A Christmas Story&quot; leg lamp sold for $19,000 at auction!</span>
-              <span className="ticker-item">❄️ The snow in &quot;White Christmas&quot; was actually shaved plastic</span>
-              <span className="ticker-item">🎅 Tim Allen wasn&apos;t the first choice for &quot;The Santa Clause&quot;</span>
-              <span className="ticker-item">🦌 8 reindeer were named in the 1823 poem &quot;A Visit from St. Nicholas&quot;</span>
-              <span className="ticker-item">🎄 &quot;National Lampoon&apos;s Christmas Vacation&quot; house had 25,000 lights!</span>
-              <span className="ticker-item">🎬 Is Die Hard a Christmas movie? The debate continues! 🎄</span>
-              <span className="ticker-item">🎅 &quot;Home Alone&quot; was filmed in just 3 months!</span>
-              <span className="ticker-item">❄️ &quot;It&apos;s a Wonderful Life&quot; was a box office flop when first released</span>
-              <span className="ticker-item">🦌 Rudolph was created for a Montgomery Ward coloring book in 1939</span>
-              <span className="ticker-item">🎄 &quot;Elf&quot; took 3 years to make due to Will Ferrell&apos;s schedule</span>
+              <span className="ticker-item">🎆 The Times Square ball has dropped every year since 1907! 🗽</span>
+              <span className="ticker-item">🥂 Americans consume 360 million glasses of sparkling wine on NYE!</span>
+              <span className="ticker-item">🎊 In Spain, people eat 12 grapes at midnight for good luck</span>
+              <span className="ticker-item">🍾 The tradition of singing &quot;Auld Lang Syne&quot; started in Scotland</span>
+              <span className="ticker-item">🎇 Sydney, Australia hosts one of the world&apos;s first NYE celebrations</span>
+              <span className="ticker-item">✨ The original Times Square ball weighed 700 lbs &amp; had 100 light bulbs</span>
+              <span className="ticker-item">🎆 In Denmark, people throw plates at friends&apos; doors for good luck!</span>
+              <span className="ticker-item">🥂 New Year&apos;s is the oldest celebrated holiday - 4,000 years old!</span>
+              <span className="ticker-item">🎊 In Japan, bells ring 108 times to cleanse 108 human sins</span>
+              <span className="ticker-item">🍾 The current Times Square ball has 2,688 Waterford crystals!</span>
+              <span className="ticker-item">🎆 The Times Square ball has dropped every year since 1907! 🗽</span>
+              <span className="ticker-item">🥂 Americans consume 360 million glasses of sparkling wine on NYE!</span>
+              <span className="ticker-item">🎊 In Spain, people eat 12 grapes at midnight for good luck</span>
+              <span className="ticker-item">🍾 The tradition of singing &quot;Auld Lang Syne&quot; started in Scotland</span>
+              <span className="ticker-item">🎇 Sydney, Australia hosts one of the world&apos;s first NYE celebrations</span>
             </div>
           </div>
         </div>
@@ -521,47 +582,93 @@ export default function Home() {
           animation: float-down linear infinite;
         }
 
-        /* Retro Banner */
+        /* Retro Banner - New Year's Gold & Purple */
         .retro-banner {
-          background: linear-gradient(90deg, #8B0000, #CD5C5C, #FF6347, #CD5C5C, #8B0000);
+          background: linear-gradient(90deg, #4B0082, #663399, #9370DB, #663399, #4B0082);
           border-bottom: 4px solid #FFD700;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         /* Retro Text Shadow */
         .retro-text-shadow {
-          text-shadow: 3px 3px 0px #8B0000, -1px -1px 0px #FFA500;
+          text-shadow: 3px 3px 0px #4B0082, -1px -1px 0px #FFD700;
         }
 
-        /* Sunburst effect - very Brady Bunch */
+        /* Countdown Banner */
+        .countdown-banner {
+          background: linear-gradient(90deg, rgba(75, 0, 130, 0.9), rgba(102, 51, 153, 0.9), rgba(75, 0, 130, 0.9));
+          border-bottom: 2px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .countdown-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-width: 45px;
+        }
+
+        @media (min-width: 640px) {
+          .countdown-item {
+            min-width: 60px;
+          }
+        }
+
+        .countdown-number {
+          font-size: 1.5rem;
+          font-weight: 900;
+          color: #FFD700;
+          text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 2px 2px 0px #4B0082;
+          line-height: 1;
+        }
+
+        @media (min-width: 640px) {
+          .countdown-number {
+            font-size: 2rem;
+          }
+        }
+
+        .countdown-label {
+          font-size: 0.6rem;
+          color: rgba(255, 255, 255, 0.6);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        @media (min-width: 640px) {
+          .countdown-label {
+            font-size: 0.7rem;
+          }
+        }
+
+        /* Sunburst effect - New Year's Gold & Purple */
         .sunburst {
           background: conic-gradient(
             from 0deg,
-            #FF6B35 0deg,
-            #F7931E 15deg,
-            #FF6B35 30deg,
-            #F7931E 45deg,
-            #FF6B35 60deg,
-            #F7931E 75deg,
-            #FF6B35 90deg,
-            #F7931E 105deg,
-            #FF6B35 120deg,
-            #F7931E 135deg,
-            #FF6B35 150deg,
-            #F7931E 165deg,
-            #FF6B35 180deg,
-            #F7931E 195deg,
-            #FF6B35 210deg,
-            #F7931E 225deg,
-            #FF6B35 240deg,
-            #F7931E 255deg,
-            #FF6B35 270deg,
-            #F7931E 285deg,
-            #FF6B35 300deg,
-            #F7931E 315deg,
-            #FF6B35 330deg,
-            #F7931E 345deg,
-            #FF6B35 360deg
+            #FFD700 0deg,
+            #9370DB 15deg,
+            #FFD700 30deg,
+            #9370DB 45deg,
+            #FFD700 60deg,
+            #9370DB 75deg,
+            #FFD700 90deg,
+            #9370DB 105deg,
+            #FFD700 120deg,
+            #9370DB 135deg,
+            #FFD700 150deg,
+            #9370DB 165deg,
+            #FFD700 180deg,
+            #9370DB 195deg,
+            #FFD700 210deg,
+            #9370DB 225deg,
+            #FFD700 240deg,
+            #9370DB 255deg,
+            #FFD700 270deg,
+            #9370DB 285deg,
+            #FFD700 300deg,
+            #9370DB 315deg,
+            #FFD700 330deg,
+            #9370DB 345deg,
+            #FFD700 360deg
           );
           border-radius: 50%;
           opacity: 0.3;
