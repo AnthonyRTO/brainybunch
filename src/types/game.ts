@@ -61,6 +61,9 @@ export type Genre =
   | 'teen_slang'
   | 'greek_mythology'
   | 'cyprus_knowledge'
+  | 'canadian_history'
+  | 'skiing_knowledge'
+  | 'antigua_facts'
   | 'mix_it_up';
 
 export interface GenreOption {
@@ -206,6 +209,30 @@ export const GENRES: GenreOption[] = [
     name: 'Cyprus Knowledge',
     icon: '🇨🇾',
     description: 'The beautiful island of Aphrodite!',
+    apiCategory: null,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'canadian_history',
+    name: 'Canadian History',
+    icon: '🍁',
+    description: 'From Confederation to today, eh!',
+    apiCategory: null,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'skiing_knowledge',
+    name: 'Skiing Knowledge',
+    icon: '⛷️',
+    description: 'Only things a skier would know!',
+    apiCategory: null,
+    useCustomQuestions: true,
+  },
+  {
+    id: 'antigua_facts',
+    name: 'Antigua Facts',
+    icon: '🏝️',
+    description: 'Interesting facts about beautiful Antigua!',
     apiCategory: null,
     useCustomQuestions: true,
   },

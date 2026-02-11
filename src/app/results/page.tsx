@@ -12,19 +12,20 @@ function ResultsContent() {
 
   const room = state.room;
   const teamScores = room?.scores || { red: 0, blue: 0 };
-  // Sort team members by score (highest first)
-  const redTeam = [...(room?.teams.red || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
-  const blueTeam = [...(room?.teams.blue || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
+  const playerScores = room?.playerScores || {};
+  // Sort team members by score (highest first) - use playerScores map for accurate scores
+  const redTeam = [...(room?.teams.red || [])].sort((a, b) => (playerScores[b.id] || 0) - (playerScores[a.id] || 0));
+  const blueTeam = [...(room?.teams.blue || [])].sort((a, b) => (playerScores[b.id] || 0) - (playerScores[a.id] || 0));
   const playerTeam = getMyTeam();
   const isIndividualMode = room?.mode === 'individual';
   const isSoloMode = room?.mode === 'solo';
 
-  // Get player's score for solo mode
-  const myScore = room?.players.find(p => p.id === state.playerId)?.score || 0;
+  // Get player's score for solo mode - use playerScores map
+  const myScore = playerScores[state.playerId || ''] || 0;
 
-  // Get sorted players for individual mode
+  // Get sorted players for individual mode - use playerScores map for accurate sorting
   const sortedPlayers = room?.players
-    ? [...room.players].sort((a, b) => (b.score || 0) - (a.score || 0))
+    ? [...room.players].sort((a, b) => (playerScores[b.id] || 0) - (playerScores[a.id] || 0))
     : [];
 
   // Determine winner
@@ -202,7 +203,7 @@ function ResultsContent() {
                 </div>
               </div>
               <div className="text-2xl font-black text-primary">
-                {Math.floor(p.score || 0)}
+                {Math.floor(playerScores[p.id] || 0)}
               </div>
             </div>
           ))}
@@ -234,7 +235,7 @@ function ResultsContent() {
                     {p.id === state.playerId && ' (You)'}
                   </span>
                   <span className="text-team-red font-bold ml-2">
-                    {Math.floor(p.score || 0)}
+                    {Math.floor(playerScores[p.id] || 0)}
                   </span>
                 </div>
               ))}
@@ -265,7 +266,7 @@ function ResultsContent() {
                     {p.id === state.playerId && ' (You)'}
                   </span>
                   <span className="text-team-blue font-bold ml-2">
-                    {Math.floor(p.score || 0)}
+                    {Math.floor(playerScores[p.id] || 0)}
                   </span>
                 </div>
               ))}
@@ -297,7 +298,7 @@ function ResultsContent() {
               {isSoloMode
                 ? Math.floor(myScore)
                 : isIndividualMode
-                ? Math.floor(sortedPlayers.reduce((sum, p) => sum + (p.score || 0), 0))
+                ? Math.floor(sortedPlayers.reduce((sum, p) => sum + (playerScores[p.id] || 0), 0))
                 : Math.floor(teamScores.red + teamScores.blue)
               }
             </div>

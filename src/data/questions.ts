@@ -437,6 +437,93 @@ export const REALITY_TV_QUESTIONS: Question[] = [
   createQuestion('reality-25', "Who created 'Survivor'?", 'Mark Burnett', ['Simon Cowell', 'Ryan Seacrest', 'Jeff Probst'], 'Reality TV', 'hard'),
 ];
 
+// ========== CANADIAN HISTORY ==========
+export const CANADIAN_HISTORY_QUESTIONS: Question[] = [
+  createQuestion('canada-1', "What year did Canada become a country (Confederation)?", '1867', ['1776', '1867', '1901'], 'Canadian History', 'easy'),
+  createQuestion('canada-2', "Who was Canada's first Prime Minister?", 'John A. Macdonald', ['Wilfrid Laurier', 'Robert Borden', 'Alexander Mackenzie'], 'Canadian History', 'easy'),
+  createQuestion('canada-3', "What is the capital city of Canada?", 'Ottawa', ['Toronto', 'Montreal', 'Vancouver'], 'Canadian History', 'easy'),
+  createQuestion('canada-4', "Which province was the last to join Confederation?", 'Newfoundland', ['British Columbia', 'Alberta', 'Saskatchewan'], 'Canadian History'),
+  createQuestion('canada-5', "What year did Newfoundland join Canada?", '1949', ['1905', '1931', '1967'], 'Canadian History'),
+  createQuestion('canada-6', "What is Canada's national animal?", 'Beaver', ['Moose', 'Polar Bear', 'Canada Goose'], 'Canadian History', 'easy'),
+  createQuestion('canada-7', "What does the word 'Canada' mean, derived from Indigenous language?", 'Village or settlement', ['Great land', 'Northern waters', 'Land of ice'], 'Canadian History'),
+  createQuestion('canada-8', "Which war saw Canadian troops fight at Vimy Ridge?", 'World War I', ['World War II', 'Korean War', 'War of 1812'], 'Canadian History'),
+  createQuestion('canada-9', "What year was the Canadian flag with the maple leaf adopted?", '1965', ['1867', '1945', '1982'], 'Canadian History'),
+  createQuestion('canada-10', "Who was the longest-serving Prime Minister of Canada?", 'William Lyon Mackenzie King', ['Pierre Trudeau', 'John A. Macdonald', 'Jean Chrétien'], 'Canadian History', 'hard'),
+  createQuestion('canada-11', "What is the name of the document that patriated Canada's constitution in 1982?", 'Constitution Act, 1982', ['British North America Act', 'Meech Lake Accord', 'Charter of Rights'], 'Canadian History'),
+  createQuestion('canada-12', "Which Canadian city hosted the 1976 Summer Olympics?", 'Montreal', ['Toronto', 'Vancouver', 'Calgary'], 'Canadian History'),
+  createQuestion('canada-13', "What year did women gain the right to vote federally in Canada?", '1918', ['1900', '1929', '1945'], 'Canadian History'),
+  createQuestion('canada-14', "Which province is known as 'La Belle Province'?", 'Quebec', ['Ontario', 'New Brunswick', 'Nova Scotia'], 'Canadian History', 'easy'),
+  createQuestion('canada-15', "Who was Canada's first female Prime Minister?", 'Kim Campbell', ['Margaret Trudeau', 'Nellie McClung', 'Agnes Macphail'], 'Canadian History'),
+  createQuestion('canada-16', "What is the RCMP's full name?", 'Royal Canadian Mounted Police', ['Royal Canada Military Police', 'Regional Canadian Mounted Patrol', 'Royal Canadian Municipal Police'], 'Canadian History', 'easy'),
+  createQuestion('canada-17', "Which Indigenous group signed Treaty 7 in 1877?", 'Blackfoot Confederacy', ['Cree Nation', 'Ojibwe', 'Inuit'], 'Canadian History', 'hard'),
+  createQuestion('canada-18', "What Canadian city was the terminus of the Underground Railroad?", 'St. Catharines', ['Halifax', 'Montreal', 'Windsor'], 'Canadian History'),
+  createQuestion('canada-19', "In what year was the transcontinental railway completed?", '1885', ['1867', '1900', '1876'], 'Canadian History'),
+  createQuestion('canada-20', "Who are the 'Famous Five' known for?", 'Women\'s rights - Persons Case', ['Founding Canada', 'Hockey', 'Music'], 'Canadian History'),
+  createQuestion('canada-21', "What is Terry Fox famous for?", 'Marathon of Hope for cancer research', ['Hockey', 'Politics', 'Music'], 'Canadian History', 'easy'),
+  createQuestion('canada-22', "Which province was created in 1999?", 'Nunavut', ['Yukon', 'Northwest Territories', 'Labrador'], 'Canadian History'),
+  createQuestion('canada-23', "What event occurred in Canada on July 1, 1980?", 'O Canada became official national anthem', ['Trudeau elected', 'Quebec referendum', 'Constitution patriated'], 'Canadian History', 'hard'),
+  createQuestion('canada-24', "Which battle is considered Canada's coming of age in WWI?", 'Battle of Vimy Ridge', ['Battle of the Somme', 'D-Day', 'Battle of Ypres'], 'Canadian History'),
+  createQuestion('canada-25', "What year did the Toronto Maple Leafs last win the Stanley Cup?", '1967', ['1972', '1993', '1985'], 'Canadian History'),
+];
+
+// ========== SKIING KNOWLEDGE ==========
+export const SKIING_KNOWLEDGE_QUESTIONS: Question[] = [
+  createQuestion('ski-1', "What does 'après-ski' refer to?", 'Social activities after skiing', ['A type of ski', 'A ski technique', 'A mountain peak'], 'Skiing Knowledge', 'easy'),
+  createQuestion('ski-2', "What color trail marker indicates the easiest runs?", 'Green', ['Blue', 'Black', 'Red'], 'Skiing Knowledge', 'easy'),
+  createQuestion('ski-3', "What is a 'mogul'?", 'A bump on a ski slope', ['A type of ski boot', 'A ski lift', 'A famous skier'], 'Skiing Knowledge', 'easy'),
+  createQuestion('ski-4', "What does 'powder' refer to in skiing?", 'Fresh, light snow', ['A type of ski wax', 'A skiing technique', 'A ski brand'], 'Skiing Knowledge', 'easy'),
+  createQuestion('ski-5', "What is a 'yard sale' in skiing slang?", 'A crash where gear scatters everywhere', ['A ski equipment sale', 'A beginner slope', 'A rental shop'], 'Skiing Knowledge'),
+  createQuestion('ski-6', "What does DIN setting refer to on ski bindings?", 'Release tension setting', ['Direction indicator', 'Din of noise level', 'Diameter of boot'], 'Skiing Knowledge'),
+  createQuestion('ski-7', "What is a 'pizza' or 'snowplow' position?", 'Tips together, tails apart to slow down', ['Falling position', 'Resting position', 'Speed position'], 'Skiing Knowledge', 'easy'),
+  createQuestion('ski-8', "What is a 'corduroy' slope?", 'Freshly groomed runs with parallel lines', ['A mogul field', 'An icy slope', 'A tree run'], 'Skiing Knowledge'),
+  createQuestion('ski-9', "What is the term for skiing off-piste through trees?", 'Glade skiing or tree skiing', ['Mogul skiing', 'Carving', 'Slalom'], 'Skiing Knowledge'),
+  createQuestion('ski-10', "What does 'first chair' mean?", 'Being first on the lift when it opens', ['A ski racing term', 'A type of lift', 'A beginner position'], 'Skiing Knowledge'),
+  createQuestion('ski-11', "What is a 'face shot'?", 'Powder snow hitting your face while skiing', ['A ski photo', 'A crash', 'A lift ride'], 'Skiing Knowledge'),
+  createQuestion('ski-12', "What type of ski is best for deep powder?", 'Fat or wide skis', ['Racing skis', 'Mogul skis', 'Park skis'], 'Skiing Knowledge'),
+  createQuestion('ski-13', "What is a 'double black diamond' trail?", 'Expert only - most difficult', ['Moderate difficulty', 'Easy slope', 'Racing course'], 'Skiing Knowledge', 'easy'),
+  createQuestion('ski-14', "What does 'edge' mean in skiing terminology?", 'The metal strip on the side of skis', ['The cliff side', 'A ski brand', 'A type of turn'], 'Skiing Knowledge'),
+  createQuestion('ski-15', "What is a 'gondola'?", 'An enclosed aerial lift', ['A type of ski', 'A mountain restaurant', 'A ski technique'], 'Skiing Knowledge', 'easy'),
+  createQuestion('ski-16', "What does 'carving' mean in skiing?", 'Making clean turns on edge', ['Skiing slowly', 'Skiing in powder', 'Skiing backwards'], 'Skiing Knowledge'),
+  createQuestion('ski-17', "What is a 'skin track' in backcountry skiing?", 'The path made while hiking uphill', ['A racing line', 'A groomed trail', 'A type of injury'], 'Skiing Knowledge'),
+  createQuestion('ski-18', "What are 'skins' used for in ski touring?", 'Climbing uphill - grip strips on ski bases', ['Protecting skis', 'Waxing skis', 'Carrying gear'], 'Skiing Knowledge'),
+  createQuestion('ski-19', "What is a 'whiteout' condition?", 'Flat light where you can\'t see terrain features', ['Heavy snowfall only', 'Sunny conditions', 'Night skiing'], 'Skiing Knowledge'),
+  createQuestion('ski-20', "What is the 'fall line'?", 'The most direct path down a slope', ['Where people crash', 'The lift line', 'The boundary line'], 'Skiing Knowledge'),
+  createQuestion('ski-21', "What does FIS stand for in ski racing?", 'Fédération Internationale de Ski', ['Federal International Sports', 'Fast International Skiing', 'Finnish Ice Sports'], 'Skiing Knowledge'),
+  createQuestion('ski-22', "What is a 'poma lift'?", 'A surface lift with a disc you sit on', ['A chairlift', 'A gondola', 'A magic carpet'], 'Skiing Knowledge'),
+  createQuestion('ski-23', "What is 'boilerplate' in skiing terms?", 'Hard, icy snow surface', ['A type of equipment', 'A grooming machine', 'A ski technique'], 'Skiing Knowledge'),
+  createQuestion('ski-24', "What do twin-tip skis allow you to do?", 'Ski and land backwards (switch)', ['Go faster', 'Float better in powder', 'Make sharper turns'], 'Skiing Knowledge'),
+  createQuestion('ski-25', "What is a 'Jerry' in ski culture slang?", 'An inexperienced or reckless skier', ['A pro skier', 'A ski instructor', 'A lift operator'], 'Skiing Knowledge'),
+];
+
+// ========== ANTIGUA FACTS ==========
+export const ANTIGUA_FACTS_QUESTIONS: Question[] = [
+  createQuestion('antigua-1', "How many beaches does Antigua famously claim to have?", '365 - one for every day of the year', ['100', '200', '52 - one for every week'], 'Antigua Facts', 'easy'),
+  createQuestion('antigua-2', "What is the capital city of Antigua and Barbuda?", "St. John's", ['English Harbour', 'Falmouth', 'Jolly Harbour'], 'Antigua Facts', 'easy'),
+  createQuestion('antigua-3', "What year did Antigua and Barbuda gain independence from the United Kingdom?", '1981', ['1962', '1975', '1990'], 'Antigua Facts'),
+  createQuestion('antigua-4', "Who named the island Antigua?", 'Christopher Columbus', ['Sir Francis Drake', 'Horatio Nelson', 'Queen Victoria'], 'Antigua Facts'),
+  createQuestion('antigua-5', "What famous naval dockyard in Antigua is a UNESCO World Heritage Site?", "Nelson's Dockyard", ['English Harbour Fort', 'Shirley Heights Base', 'Clarence House Dock'], 'Antigua Facts'),
+  createQuestion('antigua-6', "What is the official language of Antigua and Barbuda?", 'English', ['Spanish', 'French', 'Dutch'], 'Antigua Facts', 'easy'),
+  createQuestion('antigua-7', "What is the currency used in Antigua?", 'Eastern Caribbean Dollar', ['US Dollar', 'Antiguan Pound', 'Caribbean Peso'], 'Antigua Facts'),
+  createQuestion('antigua-8', "Which famous West Indian cricketer is from Antigua?", 'Sir Vivian Richards', ['Brian Lara', 'Chris Gayle', 'Curtly Ambrose'], 'Antigua Facts'),
+  createQuestion('antigua-9', "What is Antigua's national dish?", 'Fungie and pepperpot', ['Jerk chicken and rice', 'Saltfish and ackee', 'Roti and curry'], 'Antigua Facts'),
+  createQuestion('antigua-10', "What is unique about Antigua's freshwater supply historically?", 'The island has no rivers or streams', ['It only rains once a year', 'All water comes from one spring', 'Water is imported from Barbuda'], 'Antigua Facts'),
+  createQuestion('antigua-11', "What natural limestone formation on Antigua's east coast is a popular attraction?", "Devil's Bridge", ['Angel Arch', 'Neptune\'s Gate', 'Coral Canyon'], 'Antigua Facts'),
+  createQuestion('antigua-12', "What annual sailing event is Antigua famous for hosting?", 'Antigua Sailing Week', ['Caribbean Cup Regatta', 'Atlantic Rally', 'Leeward Islands Race'], 'Antigua Facts'),
+  createQuestion('antigua-13', "What is the approximate size of Antigua?", '108 square miles', ['50 square miles', '250 square miles', '500 square miles'], 'Antigua Facts'),
+  createQuestion('antigua-14', "What island group is Antigua part of?", 'Leeward Islands', ['Windward Islands', 'Greater Antilles', 'Virgin Islands'], 'Antigua Facts'),
+  createQuestion('antigua-15', "What is the name of Antigua's sister island?", 'Barbuda', ['Montserrat', 'Nevis', 'Dominica'], 'Antigua Facts', 'easy'),
+  createQuestion('antigua-16', "What is Barbuda famous for having?", 'Pink sand beaches', ['Active volcanoes', 'Gold mines', 'Ancient pyramids'], 'Antigua Facts'),
+  createQuestion('antigua-17', "What major cricket event did Antigua host in 2007?", 'ICC Cricket World Cup matches', ['Cricket Champions League', 'The Ashes', 'Caribbean Premier League Finals'], 'Antigua Facts'),
+  createQuestion('antigua-18', "What was the main crop grown in Antigua during colonial times?", 'Sugar cane', ['Cotton', 'Tobacco', 'Coffee'], 'Antigua Facts'),
+  createQuestion('antigua-19', "What is the name of one of the first sugar plantations on Antigua?", "Betty's Hope", ['Sweet Fields', 'Plantation House', 'Sugar Hill Estate'], 'Antigua Facts'),
+  createQuestion('antigua-20', "What extremely rare snake is found only in Antigua?", 'Antiguan Racer', ['Antigua Viper', 'Caribbean Cobra', 'Leeward Python'], 'Antigua Facts'),
+  createQuestion('antigua-21', "What hilltop lookout is famous for its Sunday afternoon parties?", 'Shirley Heights', ['Nelson\'s Peak', 'Fig Tree Hill', 'Boggy Peak'], 'Antigua Facts'),
+  createQuestion('antigua-22', "When does Antigua Carnival typically take place?", 'Late July to early August', ['December', 'February', 'Easter weekend'], 'Antigua Facts'),
+  createQuestion('antigua-23', "What Indigenous people first inhabited Antigua?", 'Siboney', ['Arawak', 'Carib', 'Taino'], 'Antigua Facts'),
+  createQuestion('antigua-24', "What scenic road passes through Antigua's tropical rainforest?", 'Fig Tree Drive', ['Palm Road', 'Coconut Highway', 'Jungle Trail'], 'Antigua Facts'),
+  createQuestion('antigua-25', "What church in Seville, Spain inspired Columbus to name the island?", 'Santa Maria La Antigua', ['San Juan Bautista', 'Iglesia de Cristo', 'Santa Maria del Mar'], 'Antigua Facts'),
+];
+
 // ========== GET QUESTIONS FOR GENRE ==========
 export function getQuestionsForGenre(genre: Genre): Question[] {
   let questions: Question[];
@@ -484,6 +571,15 @@ export function getQuestionsForGenre(genre: Genre): Question[] {
     case 'reality_tv':
       questions = [...REALITY_TV_QUESTIONS];
       break;
+    case 'canadian_history':
+      questions = [...CANADIAN_HISTORY_QUESTIONS];
+      break;
+    case 'skiing_knowledge':
+      questions = [...SKIING_KNOWLEDGE_QUESTIONS];
+      break;
+    case 'antigua_facts':
+      questions = [...ANTIGUA_FACTS_QUESTIONS];
+      break;
     case 'mix_it_up':
       // Mix questions from all categories
       const all = [
@@ -501,6 +597,9 @@ export function getQuestionsForGenre(genre: Genre): Question[] {
         ...shuffleArray(WORLD_GEOGRAPHY_QUESTIONS).slice(0, 1),
         ...shuffleArray(FAMILY_SITCOMS_QUESTIONS).slice(0, 1),
         ...shuffleArray(REALITY_TV_QUESTIONS).slice(0, 1),
+        ...shuffleArray(CANADIAN_HISTORY_QUESTIONS).slice(0, 1),
+        ...shuffleArray(SKIING_KNOWLEDGE_QUESTIONS).slice(0, 1),
+        ...shuffleArray(ANTIGUA_FACTS_QUESTIONS).slice(0, 1),
       ];
       questions = shuffleArray(all);
       break;

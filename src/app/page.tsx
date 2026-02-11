@@ -20,7 +20,7 @@ type Season = 'holiday' | 'valentine' | 'spring' | 'summer' | 'halloween' | 'fal
 
 function getSeason(): Season {
   const month = new Date().getMonth(); // 0-11
-  if (month === 11 || month === 0) return 'holiday'; // Dec-Jan
+  if (month === 11) return 'holiday'; // Dec only
   if (month === 1) return 'valentine'; // Feb
   if (month >= 2 && month <= 4) return 'spring'; // Mar-May
   if (month >= 5 && month <= 7) return 'summer'; // Jun-Aug
@@ -32,7 +32,7 @@ function getSeason(): Season {
 const seasonalConfig = {
   holiday: {
     emoji: '🎉',
-    greeting: 'Happy Holidays!',
+    greeting: 'Happy New Year!',
     particles: ['🎆', '🥂', '🎊', '✨', '🍾', '⭐', '🎇', '💫'],
     accentColor: 'text-yellow-400',
     bgGradient: 'from-purple-900/20 via-transparent to-yellow-900/20',
@@ -95,7 +95,6 @@ export default function Home() {
   const [particles, setParticles] = useState<Array<{ id: number; emoji: string; left: number; delay: number; duration: number }>>([]);
   const [joiningFromLink, setJoiningFromLink] = useState(false);
   const [hasSavedName, setHasSavedName] = useState(false);
-  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
     const currentSeason = getSeason();
@@ -129,36 +128,6 @@ export default function Home() {
     }
 
   }, []);
-
-  // New Year's countdown timer
-  useEffect(() => {
-    if (season !== 'holiday') return;
-
-    const calculateCountdown = () => {
-      const now = new Date();
-      const currentYear = now.getFullYear();
-      // Target: Jan 1st of next year at midnight
-      const newYear = new Date(currentYear + 1, 0, 1, 0, 0, 0);
-      const diff = newYear.getTime() - now.getTime();
-
-      if (diff <= 0) {
-        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      setCountdown({ days, hours, minutes, seconds });
-    };
-
-    calculateCountdown();
-    const interval = setInterval(calculateCountdown, 1000);
-
-    return () => clearInterval(interval);
-  }, [season]);
 
   // Navigate to lobby when room is created/joined
   useEffect(() => {
@@ -230,7 +199,7 @@ export default function Home() {
   };
 
   return (
-    <main className={`min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-32 sm:pt-36 pb-8 relative overflow-hidden bg-gradient-to-b ${config.bgGradient}`}>
+    <main className={`min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-24 sm:pt-28 pb-8 relative overflow-hidden bg-gradient-to-b ${config.bgGradient}`}>
       {/* Connection Status */}
       <ConnectionStatus isConnected={state.isConnected} />
 
@@ -268,60 +237,28 @@ export default function Home() {
         </div>
       </div>
 
-      {/* New Year's Countdown */}
-      {season === 'holiday' && (
-        <div className="fixed top-11 sm:top-14 left-0 right-0 z-20 countdown-banner py-2 sm:py-3">
-          <div className="flex flex-col items-center">
-            <p className="text-xs sm:text-sm text-white/70 mb-1">Countdown to 2026</p>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <div className="countdown-item">
-                <span className="countdown-number">{countdown.days}</span>
-                <span className="countdown-label">Days</span>
-              </div>
-              <span className="text-yellow-400 text-xl sm:text-2xl font-bold">:</span>
-              <div className="countdown-item">
-                <span className="countdown-number">{String(countdown.hours).padStart(2, '0')}</span>
-                <span className="countdown-label">Hours</span>
-              </div>
-              <span className="text-yellow-400 text-xl sm:text-2xl font-bold">:</span>
-              <div className="countdown-item">
-                <span className="countdown-number">{String(countdown.minutes).padStart(2, '0')}</span>
-                <span className="countdown-label">Mins</span>
-              </div>
-              <span className="text-yellow-400 text-xl sm:text-2xl font-bold">:</span>
-              <div className="countdown-item">
-                <span className="countdown-number">{String(countdown.seconds).padStart(2, '0')}</span>
-                <span className="countdown-label">Secs</span>
-              </div>
-            </div>
+      {/* Fun Facts Ticker - Toronto Sports Trivia */}
+      <div className="fixed top-11 sm:top-14 left-0 right-0 z-20 bg-black/60 py-1.5 sm:py-2 overflow-hidden">
+        <div className="ticker-wrapper">
+          <div className="ticker-content">
+            <span className="ticker-item">🏀 The Raptors are the only NBA team based outside the USA!</span>
+            <span className="ticker-item">🏒 The Maple Leafs last won the Stanley Cup in 1967 - longest drought in NHL!</span>
+            <span className="ticker-item">⚾ The Blue Jays won back-to-back World Series in 1992 &amp; 1993!</span>
+            <span className="ticker-item">🏀 Vince Carter&apos;s 2000 Slam Dunk Contest is considered the greatest ever!</span>
+            <span className="ticker-item">🏒 Maple Leaf Gardens opened in 1931 and was built in just 5 months!</span>
+            <span className="ticker-item">⚾ Joe Carter&apos;s walk-off HR in &apos;93 is one of the most iconic moments in MLB history!</span>
+            <span className="ticker-item">🏀 The Raptors won their first NBA Championship in 2019!</span>
+            <span className="ticker-item">🏒 The Leafs are one of the NHL&apos;s &quot;Original Six&quot; teams!</span>
+            <span className="ticker-item">⚾ Rogers Centre (SkyDome) was the first stadium with a retractable roof!</span>
+            <span className="ticker-item">🏀 Kyle Lowry is known as the &quot;Greatest Raptor of All Time&quot;!</span>
+            <span className="ticker-item">🏒 Darryl Sittler scored 10 points in one game in 1976 - still an NHL record!</span>
+            <span className="ticker-item">⚾ Roberto Alomar&apos;s diving catch in &apos;92 ALCS is a Blue Jays legend!</span>
+            <span className="ticker-item">🏀 The Raptors are the only NBA team based outside the USA!</span>
+            <span className="ticker-item">🏒 The Maple Leafs last won the Stanley Cup in 1967 - longest drought in NHL!</span>
+            <span className="ticker-item">⚾ The Blue Jays won back-to-back World Series in 1992 &amp; 1993!</span>
           </div>
         </div>
-      )}
-
-      {/* Fun Facts Ticker - New Year's Edition */}
-      {season === 'holiday' && (
-        <div className="fixed top-[5.5rem] sm:top-[6.5rem] left-0 right-0 z-20 bg-black/60 py-1.5 sm:py-2 overflow-hidden">
-          <div className="ticker-wrapper">
-            <div className="ticker-content">
-              <span className="ticker-item">🎆 The Times Square ball has dropped every year since 1907! 🗽</span>
-              <span className="ticker-item">🥂 Americans consume 360 million glasses of sparkling wine on NYE!</span>
-              <span className="ticker-item">🎊 In Spain, people eat 12 grapes at midnight for good luck</span>
-              <span className="ticker-item">🍾 The tradition of singing &quot;Auld Lang Syne&quot; started in Scotland</span>
-              <span className="ticker-item">🎇 Sydney, Australia hosts one of the world&apos;s first NYE celebrations</span>
-              <span className="ticker-item">✨ The original Times Square ball weighed 700 lbs &amp; had 100 light bulbs</span>
-              <span className="ticker-item">🎆 In Denmark, people throw plates at friends&apos; doors for good luck!</span>
-              <span className="ticker-item">🥂 New Year&apos;s is the oldest celebrated holiday - 4,000 years old!</span>
-              <span className="ticker-item">🎊 In Japan, bells ring 108 times to cleanse 108 human sins</span>
-              <span className="ticker-item">🍾 The current Times Square ball has 2,688 Waterford crystals!</span>
-              <span className="ticker-item">🎆 The Times Square ball has dropped every year since 1907! 🗽</span>
-              <span className="ticker-item">🥂 Americans consume 360 million glasses of sparkling wine on NYE!</span>
-              <span className="ticker-item">🎊 In Spain, people eat 12 grapes at midnight for good luck</span>
-              <span className="ticker-item">🍾 The tradition of singing &quot;Auld Lang Syne&quot; started in Scotland</span>
-              <span className="ticker-item">🎇 Sydney, Australia hosts one of the world&apos;s first NYE celebrations</span>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* Retro Sunburst behind logo */}
       <div className="relative z-10">
@@ -592,52 +529,6 @@ export default function Home() {
         /* Retro Text Shadow */
         .retro-text-shadow {
           text-shadow: 3px 3px 0px #4B0082, -1px -1px 0px #FFD700;
-        }
-
-        /* Countdown Banner */
-        .countdown-banner {
-          background: linear-gradient(90deg, rgba(75, 0, 130, 0.9), rgba(102, 51, 153, 0.9), rgba(75, 0, 130, 0.9));
-          border-bottom: 2px solid rgba(255, 215, 0, 0.5);
-        }
-
-        .countdown-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          min-width: 45px;
-        }
-
-        @media (min-width: 640px) {
-          .countdown-item {
-            min-width: 60px;
-          }
-        }
-
-        .countdown-number {
-          font-size: 1.5rem;
-          font-weight: 900;
-          color: #FFD700;
-          text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 2px 2px 0px #4B0082;
-          line-height: 1;
-        }
-
-        @media (min-width: 640px) {
-          .countdown-number {
-            font-size: 2rem;
-          }
-        }
-
-        .countdown-label {
-          font-size: 0.6rem;
-          color: rgba(255, 255, 255, 0.6);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        @media (min-width: 640px) {
-          .countdown-label {
-            font-size: 0.7rem;
-          }
         }
 
         /* Sunburst effect - New Year's Gold & Purple */
