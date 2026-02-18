@@ -38,11 +38,11 @@ const seasonalConfig = {
     bgGradient: 'from-purple-900/20 via-transparent to-yellow-900/20',
   },
   valentine: {
-    emoji: '💕',
-    greeting: 'Happy Valentine\'s!',
-    particles: ['💕', '❤️', '💖', '💝', '💗', '✨'],
-    accentColor: 'text-pink-500',
-    bgGradient: 'from-pink-900/20 via-transparent to-red-900/20',
+    emoji: '🏖️',
+    greeting: 'Beach Vibes!',
+    particles: ['🏖️', '🌊', '🌴', '☀️', '🐚', '🏄', '🍹', '🐠'],
+    accentColor: 'text-cyan-400',
+    bgGradient: 'from-cyan-900/20 via-transparent to-amber-900/20',
   },
   spring: {
     emoji: '🌸',
@@ -230,7 +230,7 @@ export default function Home() {
       <div className="fixed top-0 left-0 right-0 z-20 py-2 sm:py-3 retro-banner">
         <div className="flex items-center justify-center gap-2 sm:gap-3">
           <span className="text-2xl sm:text-3xl animate-bounce">{config.emoji}</span>
-          <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-wide retro-text-shadow" style={{ color: '#FFD700' }}>
+          <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-wide retro-text-shadow" style={{ color: '#F4A261' }}>
             {config.greeting}
           </span>
           <span className="text-2xl sm:text-3xl animate-bounce">{config.emoji}</span>
@@ -271,7 +271,7 @@ export default function Home() {
           {/* Brady Bunch style grid frame */}
           <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 mx-auto mb-4 sm:mb-6">
             <div className="absolute inset-0 rounded-3xl retro-frame"></div>
-            <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-4 sm:border-6 border-yellow-500 logo-glow">
+            <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-4 sm:border-6 border-amber-400 logo-glow">
               <Image
                 src="/brainy-bunch-logo.jpg"
                 alt="Brainy Bunch Logo"
@@ -450,12 +450,12 @@ export default function Home() {
 
       {/* How to Play Section */}
       <div className="w-full max-w-md mt-6 sm:mt-8 relative z-10 px-1">
-        <h2 className="text-lg sm:text-xl font-bold text-center mb-3 sm:mb-4 text-yellow-400">How to Play</h2>
+        <h2 className="text-lg sm:text-xl font-bold text-center mb-3 sm:mb-4 text-amber-300">How to Play</h2>
         <div className="space-y-2 sm:space-y-3">
           <div className="flex items-start gap-2 sm:gap-3 bg-white/5 rounded-lg sm:rounded-xl p-2 sm:p-3">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-yellow-500 flex items-center justify-center text-black font-black text-xs sm:text-sm shrink-0">1</div>
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-400 flex items-center justify-center text-black font-black text-xs sm:text-sm shrink-0">1</div>
             <div>
-              <h3 className="font-bold text-yellow-400 text-sm sm:text-base">Organizer Creates Game</h3>
+              <h3 className="font-bold text-amber-300 text-sm sm:text-base">Organizer Creates Game</h3>
               <p className="text-white/60 text-xs sm:text-sm">One person picks &quot;Organizer&quot; to host and gets a code to share.</p>
             </div>
           </div>
@@ -519,47 +519,47 @@ export default function Home() {
           animation: float-down linear infinite;
         }
 
-        /* Retro Banner - New Year's Gold & Purple */
+        /* Retro Banner - Beach Vibes */
         .retro-banner {
-          background: linear-gradient(90deg, #4B0082, #663399, #9370DB, #663399, #4B0082);
-          border-bottom: 4px solid #FFD700;
+          background: linear-gradient(90deg, #0077B6, #00B4D8, #48CAE4, #00B4D8, #0077B6);
+          border-bottom: 4px solid #F4A261;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         /* Retro Text Shadow */
         .retro-text-shadow {
-          text-shadow: 3px 3px 0px #4B0082, -1px -1px 0px #FFD700;
+          text-shadow: 3px 3px 0px #0077B6, -1px -1px 0px #F4A261;
         }
 
-        /* Sunburst effect - New Year's Gold & Purple */
+        /* Sunburst effect - Beach Sun & Ocean */
         .sunburst {
           background: conic-gradient(
             from 0deg,
-            #FFD700 0deg,
-            #9370DB 15deg,
-            #FFD700 30deg,
-            #9370DB 45deg,
-            #FFD700 60deg,
-            #9370DB 75deg,
-            #FFD700 90deg,
-            #9370DB 105deg,
-            #FFD700 120deg,
-            #9370DB 135deg,
-            #FFD700 150deg,
-            #9370DB 165deg,
-            #FFD700 180deg,
-            #9370DB 195deg,
-            #FFD700 210deg,
-            #9370DB 225deg,
-            #FFD700 240deg,
-            #9370DB 255deg,
-            #FFD700 270deg,
-            #9370DB 285deg,
-            #FFD700 300deg,
-            #9370DB 315deg,
-            #FFD700 330deg,
-            #9370DB 345deg,
-            #FFD700 360deg
+            #F4A261 0deg,
+            #48CAE4 15deg,
+            #F4A261 30deg,
+            #48CAE4 45deg,
+            #F4A261 60deg,
+            #48CAE4 75deg,
+            #F4A261 90deg,
+            #48CAE4 105deg,
+            #F4A261 120deg,
+            #48CAE4 135deg,
+            #F4A261 150deg,
+            #48CAE4 165deg,
+            #F4A261 180deg,
+            #48CAE4 195deg,
+            #F4A261 210deg,
+            #48CAE4 225deg,
+            #F4A261 240deg,
+            #48CAE4 255deg,
+            #F4A261 270deg,
+            #48CAE4 285deg,
+            #F4A261 300deg,
+            #48CAE4 315deg,
+            #F4A261 330deg,
+            #48CAE4 345deg,
+            #F4A261 360deg
           );
           border-radius: 50%;
           opacity: 0.3;
@@ -573,18 +573,18 @@ export default function Home() {
 
         /* Retro frame around logo */
         .retro-frame {
-          background: linear-gradient(135deg, #F7931E, #FF6B35, #E85D04);
+          background: linear-gradient(135deg, #F4A261, #E76F51, #E9C46A);
           transform: rotate(3deg);
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
 
         /* Retro title gradient */
         .retro-text-gradient {
-          background: linear-gradient(180deg, #FFD700 0%, #FFA500 50%, #FF6B35 100%);
+          background: linear-gradient(180deg, #F4A261 0%, #E9C46A 50%, #48CAE4 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          filter: drop-shadow(3px 3px 0px #8B4513);
+          filter: drop-shadow(3px 3px 0px #0077B6);
         }
 
         .retro-title {
@@ -592,16 +592,16 @@ export default function Home() {
         }
 
         .retro-subtitle {
-          color: #FFD700;
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+          color: #F4A261;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(244, 162, 97, 0.3);
           letter-spacing: 1px;
         }
 
         /* Logo Glow Effect */
         .logo-glow {
           box-shadow:
-            0 0 20px rgba(255, 215, 0, 0.4),
-            0 0 40px rgba(255, 107, 53, 0.3),
+            0 0 20px rgba(72, 202, 228, 0.4),
+            0 0 40px rgba(244, 162, 97, 0.3),
             0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
@@ -624,8 +624,8 @@ export default function Home() {
         /* Retro grid background */
         .retro-grid {
           background-image:
-            linear-gradient(rgba(255, 107, 53, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 107, 53, 0.3) 1px, transparent 1px);
+            linear-gradient(rgba(72, 202, 228, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(72, 202, 228, 0.3) 1px, transparent 1px);
           background-size: 40px 40px;
         }
 
@@ -643,7 +643,7 @@ export default function Home() {
 
         .ticker-item {
           padding: 0 1.5rem;
-          color: #FFD700;
+          color: #F4A261;
           font-weight: 600;
           font-size: 0.75rem;
         }
