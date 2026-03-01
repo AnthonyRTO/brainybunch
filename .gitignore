@@ -40,3 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# backend data (user data, purchases, etc.)
+backend/data/
+
+# admin dashboard (contains API URL)
+admin-dashboard.html
