@@ -524,21 +524,22 @@ export const ANTIGUA_FACTS_QUESTIONS: Question[] = [
   createQuestion('antigua-25', "What church in Seville, Spain inspired Columbus to name the island?", 'Santa Maria La Antigua', ['San Juan Bautista', 'Iglesia de Cristo', 'Santa Maria del Mar'], 'Antigua Facts'),
 ];
 
-// ========== WORLD CUP SOCCER ==========
+// ========== WORLD CUP SOCCER (100-question bank) ==========
 export const WORLD_CUP_SOCCER_QUESTIONS: Question[] = [
+  // Champions & records
   createQuestion('wc-1', "Which country has won the most FIFA World Cup titles?", 'Brazil', ['Germany', 'Italy', 'Argentina'], 'World Cup Soccer', 'easy'),
   createQuestion('wc-2', "How many times has Brazil won the World Cup?", '5', ['4', '6', '3'], 'World Cup Soccer', 'easy'),
   createQuestion('wc-3', "Where was the first FIFA World Cup held in 1930?", 'Uruguay', ['Brazil', 'France', 'Argentina'], 'World Cup Soccer'),
   createQuestion('wc-4', "Who is the all-time leading scorer in World Cup history?", 'Miroslav Klose', ['Ronaldo (Brazil)', 'Pelé', 'Gerd Müller'], 'World Cup Soccer'),
-  createQuestion('wc-5', "How many goals did Miroslav Klose score in World Cup tournaments?", '16', ['15', '14', '17'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-5', "How many goals did Miroslav Klose score across his World Cup career?", '16', ['15', '14', '17'], 'World Cup Soccer', 'hard'),
   createQuestion('wc-6', "Which country won the 2022 World Cup in Qatar?", 'Argentina', ['France', 'Brazil', 'Germany'], 'World Cup Soccer', 'easy'),
-  createQuestion('wc-7', "Who scored the winning penalty in the 2022 World Cup final?", 'Gonzalo Montiel', ['Lionel Messi', 'Kylian Mbappé', 'Ángel Di María'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-7', "Who scored the decisive winning penalty in the 2022 World Cup final shootout?", 'Gonzalo Montiel', ['Lionel Messi', 'Kylian Mbappé', 'Ángel Di María'], 'World Cup Soccer', 'hard'),
   createQuestion('wc-8', "Which countries are co-hosting the 2026 FIFA World Cup?", 'USA, Canada & Mexico', ['USA, Canada & Brazil', 'USA, Mexico & Cuba', 'Canada, Mexico & Argentina'], 'World Cup Soccer', 'easy'),
   createQuestion('wc-9', "How many teams will compete in the 2026 World Cup — a new record?", '48', ['32', '40', '64'], 'World Cup Soccer'),
   createQuestion('wc-10', "What is the fastest goal ever scored in a World Cup match?", '11 seconds', ['27 seconds', '8 seconds', '45 seconds'], 'World Cup Soccer', 'hard'),
-  createQuestion('wc-11', "Who scored that record 11-second goal at the 2002 World Cup?", 'Hakan Şükür (Turkey)', ['Ronaldo (Brazil)', 'Miroslav Klose', 'Rivaldo'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-11', "Who scored the record 11-second goal at the 2002 World Cup?", 'Hakan Şükür (Turkey)', ['Ronaldo (Brazil)', 'Miroslav Klose', 'Rivaldo'], 'World Cup Soccer', 'hard'),
   createQuestion('wc-12', "Which player holds the record for most goals in a single World Cup tournament — 13 goals in 1958?", 'Just Fontaine', ['Gerd Müller', 'Pelé', 'Sándor Kocsis'], 'World Cup Soccer', 'hard'),
-  createQuestion('wc-13', "As of the 2022 Qatar World Cup, how many total World Cup tournaments had Brazil appeared in?", '22', ['20', '18', '24'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-13', "As of the 2022 Qatar World Cup, how many total tournaments had Brazil appeared in?", '22', ['20', '18', '24'], 'World Cup Soccer', 'hard'),
   createQuestion('wc-14', "Which country won the 2018 World Cup in Russia?", 'France', ['Croatia', 'Belgium', 'England'], 'World Cup Soccer', 'easy'),
   createQuestion('wc-15', "What was the score of the 2018 World Cup Final between France and Croatia?", '4-2', ['3-1', '2-1', '3-2'], 'World Cup Soccer'),
   createQuestion('wc-16', "Which nation hosted and won the 1966 World Cup?", 'England', ['West Germany', 'Brazil', 'Italy'], 'World Cup Soccer'),
@@ -546,11 +547,93 @@ export const WORLD_CUP_SOCCER_QUESTIONS: Question[] = [
   createQuestion('wc-18', "What is the Golden Boot award given for at the World Cup?", 'Top scorer of the tournament', ['Best goalkeeper', 'Best overall player', 'Fairest player'], 'World Cup Soccer', 'easy'),
   createQuestion('wc-19', "What is the Golden Ball award at the World Cup?", 'Best player of the tournament', ['Top scorer', 'Best young player', 'Best goalkeeper'], 'World Cup Soccer'),
   createQuestion('wc-20', "Which goalkeeper won the Golden Glove at the 2022 World Cup?", 'Emiliano Martínez', ['Hugo Lloris', 'Yassine Bounou', 'Thibaut Courtois'], 'World Cup Soccer'),
-  createQuestion('wc-21', "Which World Cup is often called the greatest of all time — featuring Maradona\'s \'Hand of God\'?", 'Mexico 1986', ['Italy 1990', 'USA 1994', 'France 1998'], 'World Cup Soccer'),
-  createQuestion('wc-22', "How many yellow cards equal a suspension for a World Cup player?", '2', ['3', '1', '4'], 'World Cup Soccer', 'easy'),
-  createQuestion('wc-23', "Which Canadian city will host World Cup 2026 matches?", 'Toronto and Vancouver', ['Montreal and Calgary', 'Ottawa and Edmonton', 'Toronto and Montreal'], 'World Cup Soccer'),
+  createQuestion('wc-21', "Which World Cup featured Maradona's 'Hand of God' and is often called the greatest ever?", 'Mexico 1986', ['Italy 1990', 'USA 1994', 'France 1998'], 'World Cup Soccer'),
+  createQuestion('wc-22', "How many yellow cards earn a player a one-game suspension at the World Cup?", '2', ['3', '1', '4'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-23', "Which Canadian cities will host World Cup 2026 matches?", 'Toronto and Vancouver', ['Montreal and Calgary', 'Ottawa and Edmonton', 'Toronto and Montreal'], 'World Cup Soccer'),
   createQuestion('wc-24', "Kylian Mbappé scored a hat-trick in the 2022 final. Which country does he play for?", 'France', ['Belgium', 'Senegal', 'Morocco'], 'World Cup Soccer'),
-  createQuestion('wc-25', "Which African nation became the first to reach a World Cup semi-final in 2022?", 'Morocco', ['Senegal', 'Cameroon', 'Nigeria'], 'World Cup Soccer'),
+  createQuestion('wc-25', "Which African nation became the first to reach a World Cup semi-final, in 2022?", 'Morocco', ['Senegal', 'Cameroon', 'Nigeria'], 'World Cup Soccer'),
+  // Hosts & champions continued
+  createQuestion('wc-26', "Which country won the inaugural 1930 World Cup?", 'Uruguay', ['Brazil', 'Argentina', 'USA'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-27', "Who did Uruguay beat in the 1930 World Cup final?", 'Argentina', ['Brazil', 'USA', 'Yugoslavia'], 'World Cup Soccer'),
+  createQuestion('wc-28', "Which country hosted the 1994 FIFA World Cup?", 'USA', ['Mexico', 'Canada', 'Brazil'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-29', "The 1994 World Cup final ended 0-0 and was decided by penalties. Which teams played?", 'Brazil and Italy', ['Germany and Italy', 'Brazil and Germany', 'Italy and Argentina'], 'World Cup Soccer'),
+  createQuestion('wc-30', "Who missed the decisive last penalty for Italy in the 1994 World Cup final?", 'Roberto Baggio', ['Paolo Maldini', 'Alessandro Del Piero', 'Gianluca Vialli'], 'World Cup Soccer'),
+  createQuestion('wc-31', "Which country won the 2006 World Cup held in Germany?", 'Italy', ['Germany', 'France', 'Portugal'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-32', "Who headbutted Marco Materazzi in the 2006 World Cup final — earning a red card?", 'Zinedine Zidane', ['Thierry Henry', 'Patrick Vieira', 'Nicolas Anelka'], 'World Cup Soccer'),
+  createQuestion('wc-33', "Who won the 2010 World Cup in South Africa?", 'Spain', ['Netherlands', 'Germany', 'Brazil'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-34', "Who scored Spain's only goal in the 2010 World Cup final against the Netherlands?", 'Andrés Iniesta', ['David Villa', 'Fernando Torres', 'Xavi'], 'World Cup Soccer'),
+  createQuestion('wc-35', "The 2010 World Cup was the first held on which continent?", 'Africa', ['Asia', 'North America', 'Oceania'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-36', "Which country won the 2014 World Cup held in Brazil?", 'Germany', ['Argentina', 'Brazil', 'Netherlands'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-37', "Germany beat Brazil 7-1 in the 2014 semi-final. What nickname was given to this historic defeat?", 'The Mineirazo', ['The Samba Disaster', 'The German Express', 'The Rio Rout'], 'World Cup Soccer'),
+  createQuestion('wc-38', "Who scored Germany's winning goal in the 2014 World Cup final against Argentina?", 'Mario Götze', ['Thomas Müller', 'Miroslav Klose', 'André Schürrle'], 'World Cup Soccer'),
+  createQuestion('wc-39', "Which country won the 1998 World Cup on home soil?", 'France', ['Germany', 'Brazil', 'Italy'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-40', "What was the score of France's 1998 World Cup final victory over Brazil?", '3-0', ['2-1', '4-2', '2-0'], 'World Cup Soccer'),
+  createQuestion('wc-41', "Which country co-hosted the 2002 World Cup with South Korea?", 'Japan', ['China', 'Australia', 'Taiwan'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-42', "What was the final score when Brazil beat Germany in the 2002 World Cup final?", '2-0', ['3-1', '2-1', '1-0'], 'World Cup Soccer'),
+  // Players
+  createQuestion('wc-43', "How old was Pelé when he played in his first World Cup final in 1958?", '17', ['19', '16', '18'], 'World Cup Soccer'),
+  createQuestion('wc-44', "Which player won the Golden Ball (best player) at BOTH the 2014 and 2022 World Cups?", 'Lionel Messi', ['Cristiano Ronaldo', 'Luka Modrić', 'Kylian Mbappé'], 'World Cup Soccer'),
+  createQuestion('wc-45', "Who scored the famous 'Hand of God' goal at the 1986 World Cup quarter-final?", 'Diego Maradona', ['Pelé', 'Johan Cruyff', 'Ronaldo'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-46', "Maradona scored both the 'Hand of God' and the 'Goal of the Century' against which team in 1986?", 'England', ['West Germany', 'Belgium', 'Italy'], 'World Cup Soccer'),
+  createQuestion('wc-47', "Which player holds the record for most World Cup appearances with 25 games across 5 tournaments?", 'Lothar Matthäus', ['Pelé', 'Cafú', 'Paolo Maldini'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-48', "Which Colombian player won the Golden Boot at the 2014 World Cup with 6 goals?", 'James Rodríguez', ['Falcao', 'Neymar', 'Robin van Persie'], 'World Cup Soccer'),
+  createQuestion('wc-49', "Who won the Golden Boot at the 2018 World Cup with 6 goals?", 'Harry Kane', ['Antoine Griezmann', 'Kylian Mbappé', 'Romelu Lukaku'], 'World Cup Soccer'),
+  createQuestion('wc-50', "Who won the Golden Ball (best player) at the 2018 World Cup?", 'Luka Modrić', ['Kylian Mbappé', 'Harry Kane', 'Antoine Griezmann'], 'World Cup Soccer'),
+  createQuestion('wc-51', "Who was the top scorer at the 2022 World Cup with 8 goals?", 'Kylian Mbappé', ['Lionel Messi', 'Olivier Giroud', 'Julián Álvarez'], 'World Cup Soccer'),
+  createQuestion('wc-52', "Which Portuguese legend won the Golden Boot at the 1966 World Cup with 9 goals?", 'Eusébio', ['Cristiano Ronaldo', 'Luis Figo', 'Rui Costa'], 'World Cup Soccer'),
+  createQuestion('wc-53', "What is the biggest winning score in World Cup match history?", '10-1', ['9-0', '8-0', '12-0'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-54', "Hungary scored 10 in the biggest ever World Cup win. Who were their 1982 opponents?", 'El Salvador', ['Zaire', 'Bolivia', 'Peru'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-55', "At which World Cup was Video Assistant Referee (VAR) technology first used?", '2018 Russia', ['2014 Brazil', '2022 Qatar', '2010 South Africa'], 'World Cup Soccer'),
+  createQuestion('wc-56', "What was the score after extra time in the 2022 World Cup final between Argentina and France?", '3-3', ['2-2', '4-4', '2-3'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-57', "Gordon Banks made 'the save of the century' at the 1970 World Cup — stopping which player?", 'Pelé', ['Franz Beckenbauer', 'Johan Cruyff', 'Gerd Müller'], 'World Cup Soccer'),
+  createQuestion('wc-58', "What is the FIFA World Cup trophy made of?", '18-karat gold', ['Silver', 'Platinum', 'Bronze'], 'World Cup Soccer'),
+  createQuestion('wc-59', "What was the original World Cup trophy called before it was retired in 1970?", 'Jules Rimet Trophy', ['FIFA Golden Cup', 'The World Cup Original', 'The FIFA Founder\'s Trophy'], 'World Cup Soccer'),
+  createQuestion('wc-60', "What happened to the original Jules Rimet Trophy after it was stolen in Brazil in 1983?", 'It was never recovered', ['It was melted down', 'A replica replaced it', 'It was found 10 years later'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-61', "Why was the 2022 Qatar World Cup played in November–December instead of the usual summer?", 'Qatar\'s extreme summer heat made conditions dangerous for players', ['To avoid Ramadan', 'To avoid clashing with European leagues', 'Qatar\'s monsoon season is in summer'], 'World Cup Soccer'),
+  createQuestion('wc-62', "How many times has Europe hosted the FIFA World Cup through 2022?", '11 times', ['9 times', '13 times', '8 times'], 'World Cup Soccer', 'hard'),
+  // Kits & nicknames
+  createQuestion('wc-63', "What color jerseys does Brazil's national team wear at home?", 'Yellow', ['Green', 'Blue', 'White'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-64', "Germany's national team is nicknamed 'Die Mannschaft'. What does this translate to?", 'The Team', ['The Eagles', 'The Germans', 'The Nationals'], 'World Cup Soccer'),
+  createQuestion('wc-65', "Italy's team is called 'Gli Azzurri'. What color does 'Azzurri' refer to?", 'Blue', ['Green', 'Red', 'White'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-66', "What is Argentina's national team nicknamed, referencing their sky-blue and white kit?", 'La Albiceleste', ['Los Pamperos', 'La Celeste', 'Los Gauchos'], 'World Cup Soccer'),
+  createQuestion('wc-67', "Which country's team is nicknamed 'Oranje' for their distinctive orange kit?", 'Netherlands', ['Belgium', 'Germany', 'Sweden'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-68', "What does Spain's team nickname 'La Roja' mean in English?", 'The Red', ['The Brave', 'The Spanish', 'The Matadors'], 'World Cup Soccer'),
+  // History & iconic moments
+  createQuestion('wc-69', "What was the score when Uruguay beat Brazil in the famous 1950 'Maracanazo'?", '2-1', ['1-0', '3-2', '2-0'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-70', "The 2026 World Cup breaks a new record as the first hosted by how many nations?", '3', ['2', '4', '6'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-71', "South Korea co-hosted the 2002 World Cup. What was their remarkable best result?", 'Semi-finals (4th place)', ['Quarter-finals', 'Round of 16', 'Final'], 'World Cup Soccer'),
+  createQuestion('wc-72', "Which country won back-to-back World Cups in 1958 and 1962?", 'Brazil', ['Italy', 'Germany', 'Argentina'], 'World Cup Soccer'),
+  createQuestion('wc-73', "The Estadio Azteca in Mexico City hosted World Cup finals in which two years?", '1970 and 1986', ['1966 and 1970', '1982 and 1986', '1970 and 1994'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-74', "Which African nation was the first to reach a World Cup quarter-final, at Italy 1990?", 'Cameroon', ['Nigeria', 'Senegal', 'Egypt'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-75', "Netherlands appeared in 3 World Cup finals and lost all of them. Which years?", '1974, 1978, and 2010', ['1974, 1982, and 2010', '1966, 1974, and 2010', '1970, 1978, and 2014'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-76', "Which country pioneered 'Total Football' at the 1974 World Cup — where any player can fill any position?", 'Netherlands', ['Brazil', 'West Germany', 'Argentina'], 'World Cup Soccer'),
+  createQuestion('wc-77', "How many World Cup goals did Pelé score across his career in three tournaments?", '12', ['8', '15', '10'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-78', "Germany (including West Germany) has appeared in the most World Cup finals. How many?", '8', ['6', '7', '9'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-79', "Who won the 2002 World Cup Golden Ball — the only goalkeeper ever to win the award?", 'Oliver Kahn (Germany)', ['Ronaldo (Brazil)', 'Rivaldo (Brazil)', 'Roberto Carlos (Brazil)'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-80', "Which World Cup was the first ever held in Asia?", '2002 Japan and South Korea', ['2010 South Africa', '1994 USA', '2006 Germany'], 'World Cup Soccer', 'easy'),
+  // Rules & format
+  createQuestion('wc-81', "In the World Cup group stage, how many points does a win earn a team?", '3 points', ['2 points', '1 point', '4 points'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-82', "How many penalties does each team take before sudden death in a World Cup shootout?", '5', ['3', '6', '4'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-83', "Which was the last host nation to win the World Cup on home soil?", 'France in 1998', ['Brazil in 2014', 'Germany in 2006', 'South Africa in 2010'], 'World Cup Soccer'),
+  createQuestion('wc-84', "At which World Cup was goal-line technology first used to determine if the ball crossed the line?", '2014 Brazil', ['2010 South Africa', '2018 Russia', '2006 Germany'], 'World Cup Soccer'),
+  // 2026 specifics
+  createQuestion('wc-85', "Which stadium in the New York/New Jersey area will host the 2026 FIFA World Cup final?", 'MetLife Stadium', ['Rose Bowl (Los Angeles)', 'AT&T Stadium (Dallas)', 'Levi\'s Stadium (San Francisco)'], 'World Cup Soccer'),
+  createQuestion('wc-86', "The 2026 World Cup will feature 104 total matches, up from how many in previous editions?", '64', ['48', '80', '128'], 'World Cup Soccer'),
+  createQuestion('wc-87', "Which iconic Mexican stadium will host 2026 World Cup games, having already hosted finals in 1970 and 1986?", 'Estadio Azteca', ['Estadio Jalisco', 'Estadio Olímpico Universitario', 'Estadio Aztlán'], 'World Cup Soccer'),
+  // More players & moments
+  createQuestion('wc-88', "Which Dutch legend invented the 'Cruyff Turn' move, debuting it at the 1974 World Cup?", 'Johan Cruyff', ['Marco van Basten', 'Ruud Gullit', 'Arjen Robben'], 'World Cup Soccer'),
+  createQuestion('wc-89', "Brazil's 1958 win in Sweden made history. Why was it so historic?", 'First time a South American country won the World Cup in Europe', ['First WC won by a team with a teenage scorer', 'First WC shown on color TV', 'First WC final to go to extra time'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-90', "Miroslav Klose broke Ronaldo (Brazil)'s World Cup goals record in which tournament?", '2014 Brazil', ['2010 South Africa', '2006 Germany', '2018 Russia'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-91', "Which team did Argentina beat in the 1986 World Cup final to give Maradona his greatest triumph?", 'West Germany', ['Brazil', 'England', 'France'], 'World Cup Soccer'),
+  createQuestion('wc-92', "England beat West Germany 4-2 in the 1966 final. What was controversial about the third goal?", 'The ball may not have fully crossed the goal line', ['It was scored by an offside player', 'The goalkeeper was fouled', 'VAR overturned it'], 'World Cup Soccer'),
+  createQuestion('wc-93', "How many times has Italy won the FIFA World Cup?", '4 times (1934, 1938, 1982, 2006)', ['3 times', '5 times', '2 times'], 'World Cup Soccer'),
+  createQuestion('wc-94', "What does 'A Seleção' — Brazil's team nickname — translate to in English?", 'The Selection', ['The Champions', 'The Canaries', 'The Five-Time Winners'], 'World Cup Soccer'),
+  createQuestion('wc-95', "Argentina won their first World Cup in 1978 on home soil. Who did they beat in the final?", 'Netherlands', ['Brazil', 'West Germany', 'France'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-96', "Who captained France to the 1998 World Cup title AND scored twice in the final against Brazil?", 'Zinedine Zidane', ['Didier Deschamps', 'Thierry Henry', 'Marcel Desailly'], 'World Cup Soccer'),
+  createQuestion('wc-97', "How many nations have ever won the FIFA World Cup?", '8', ['6', '10', '12'], 'World Cup Soccer'),
+  createQuestion('wc-98', "Pelé scored twice in the 1958 World Cup final. What was the final score against Sweden?", 'Brazil 5-2 Sweden', ['Brazil 3-1 Sweden', 'Brazil 4-2 Sweden', 'Brazil 3-0 Sweden'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-99', "Who won the controversial 2014 Golden Ball despite Argentina losing the final to Germany?", 'Lionel Messi', ['James Rodríguez', 'Thomas Müller', 'Manuel Neuer'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-100', "The 2026 World Cup expands the bracket with a new knockout round. What is it called?", 'Round of 32', ['Round of 48', 'Super Playoff Round', 'Champions Round'], 'World Cup Soccer'),
 ];
 
 // ========== GET QUESTIONS FOR GENRE ==========
@@ -610,8 +693,7 @@ export function getQuestionsForGenre(genre: Genre): Question[] {
       questions = [...ANTIGUA_FACTS_QUESTIONS];
       break;
     case 'world_cup_soccer':
-      questions = [...WORLD_CUP_SOCCER_QUESTIONS];
-      break;
+      return shuffleArray([...WORLD_CUP_SOCCER_QUESTIONS]).slice(0, 25);
     case 'mix_it_up':
       // Mix questions from all categories
       const all = [
