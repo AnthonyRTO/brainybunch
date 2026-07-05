@@ -64,6 +64,7 @@ export type Genre =
   | 'canadian_history'
   | 'skiing_knowledge'
   | 'antigua_facts'
+  | 'world_cup_soccer'
   | 'mix_it_up';
 
 export interface GenreOption {
@@ -76,6 +77,14 @@ export interface GenreOption {
 }
 
 export const GENRES: GenreOption[] = [
+  {
+    id: 'world_cup_soccer',
+    name: 'World Cup Soccer',
+    icon: '⚽',
+    description: 'Goals, legends & World Cup glory! 🏆',
+    apiCategory: null,
+    useCustomQuestions: true,
+  },
   {
     id: 'eighties_music',
     name: "80's Music",

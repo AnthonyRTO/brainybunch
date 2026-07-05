@@ -147,10 +147,10 @@ body {
   font-weight: 500;
   background-color: rgba(15, 52, 96, 0.8);
   border: 2px solid transparent;
-  transition: all 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
-.answer-btn:hover {
+.answer-btn:hover:not(:disabled) {
   border-color: rgba(233, 69, 96, 0.5);
 }
 

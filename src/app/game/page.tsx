@@ -394,7 +394,7 @@ function GameContent() {
       <div className="space-y-3 flex-1">
         {currentQuestion.allAnswers.map((answer, index) => (
           <button
-            key={index}
+            key={`${currentQuestion.id}-${index}`}
             onClick={() => handleAnswer(answer)}
             disabled={!!state.selectedAnswer}
             className={`answer-btn ${getAnswerClass(answer)}`}

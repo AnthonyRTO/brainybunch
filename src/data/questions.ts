@@ -127,7 +127,7 @@ export const TV_SHOWS_QUESTIONS: Question[] = [
   createQuestion('tv-5', "What city is Frasier set in?", 'Seattle', ['Boston', 'San Francisco', 'Chicago'], "90's/2000's TV"),
   createQuestion('tv-6', "What was Rachel's job at the end of Friends?", 'Fashion Executive at Louis Vuitton', ['Waitress', 'Buyer at Bloomingdale\'s', 'Personal Shopper'], "90's/2000's TV"),
   createQuestion('tv-7', "Who is Michael Scott's arch-nemesis from HR?", 'Toby Flenderson', ['Todd Packer', 'Jan Levinson', 'Charles Miner'], "90's/2000's TV"),
-  createQuestion('tv-8', "What is the name of Jerry Seinfeld's neighbor across the hall?", 'Newman', ['Kramer', 'George', 'Frank'], "90's/2000's TV"),
+  createQuestion('tv-8', "What is the name of Jerry Seinfeld's neighbor across the hall?", 'Kramer', ['Newman', 'George', 'Frank'], "90's/2000's TV"),
   createQuestion('tv-9', "Who played Carrie Bradshaw in Sex and the City?", 'Sarah Jessica Parker', ['Kim Cattrall', 'Kristin Davis', 'Cynthia Nixon'], "90's/2000's TV"),
   createQuestion('tv-10', "What was the name of the bar in How I Met Your Mother?", "MacLaren's Pub", ['The Pub', 'Puzzles', 'Paddy\'s Pub'], "90's/2000's TV"),
   createQuestion('tv-11', "Which character says 'That\'s what she said' frequently?", 'Michael Scott', ['Dwight Schrute', 'Jim Halpert', 'Kevin Malone'], "90's/2000's TV", 'easy'),
@@ -524,6 +524,35 @@ export const ANTIGUA_FACTS_QUESTIONS: Question[] = [
   createQuestion('antigua-25', "What church in Seville, Spain inspired Columbus to name the island?", 'Santa Maria La Antigua', ['San Juan Bautista', 'Iglesia de Cristo', 'Santa Maria del Mar'], 'Antigua Facts'),
 ];
 
+// ========== WORLD CUP SOCCER ==========
+export const WORLD_CUP_SOCCER_QUESTIONS: Question[] = [
+  createQuestion('wc-1', "Which country has won the most FIFA World Cup titles?", 'Brazil', ['Germany', 'Italy', 'Argentina'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-2', "How many times has Brazil won the World Cup?", '5', ['4', '6', '3'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-3', "Where was the first FIFA World Cup held in 1930?", 'Uruguay', ['Brazil', 'France', 'Argentina'], 'World Cup Soccer'),
+  createQuestion('wc-4', "Who is the all-time leading scorer in World Cup history?", 'Miroslav Klose', ['Ronaldo (Brazil)', 'Pelé', 'Gerd Müller'], 'World Cup Soccer'),
+  createQuestion('wc-5', "How many goals did Miroslav Klose score in World Cup tournaments?", '16', ['15', '14', '17'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-6', "Which country won the 2022 World Cup in Qatar?", 'Argentina', ['France', 'Brazil', 'Germany'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-7', "Who scored the winning penalty in the 2022 World Cup final?", 'Gonzalo Montiel', ['Lionel Messi', 'Kylian Mbappé', 'Ángel Di María'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-8', "Which countries are co-hosting the 2026 FIFA World Cup?", 'USA, Canada & Mexico', ['USA, Canada & Brazil', 'USA, Mexico & Cuba', 'Canada, Mexico & Argentina'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-9', "How many teams will compete in the 2026 World Cup — a new record?", '48', ['32', '40', '64'], 'World Cup Soccer'),
+  createQuestion('wc-10', "What is the fastest goal ever scored in a World Cup match?", '11 seconds', ['27 seconds', '8 seconds', '45 seconds'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-11', "Who scored that record 11-second goal at the 2002 World Cup?", 'Hakan Şükür (Turkey)', ['Ronaldo (Brazil)', 'Miroslav Klose', 'Rivaldo'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-12', "Which player holds the record for most goals in a single World Cup tournament — 13 goals in 1958?", 'Just Fontaine', ['Gerd Müller', 'Pelé', 'Sándor Kocsis'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-13', "As of the 2022 Qatar World Cup, how many total World Cup tournaments had Brazil appeared in?", '22', ['20', '18', '24'], 'World Cup Soccer', 'hard'),
+  createQuestion('wc-14', "Which country won the 2018 World Cup in Russia?", 'France', ['Croatia', 'Belgium', 'England'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-15', "What was the score of the 2018 World Cup Final between France and Croatia?", '4-2', ['3-1', '2-1', '3-2'], 'World Cup Soccer'),
+  createQuestion('wc-16', "Which nation hosted and won the 1966 World Cup?", 'England', ['West Germany', 'Brazil', 'Italy'], 'World Cup Soccer'),
+  createQuestion('wc-17', "Pelé won the World Cup with Brazil in which years?", '1958, 1962 and 1970', ['1954, 1958 and 1962', '1962, 1966 and 1970', '1958, 1970 and 1974'], 'World Cup Soccer'),
+  createQuestion('wc-18', "What is the Golden Boot award given for at the World Cup?", 'Top scorer of the tournament', ['Best goalkeeper', 'Best overall player', 'Fairest player'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-19', "What is the Golden Ball award at the World Cup?", 'Best player of the tournament', ['Top scorer', 'Best young player', 'Best goalkeeper'], 'World Cup Soccer'),
+  createQuestion('wc-20', "Which goalkeeper won the Golden Glove at the 2022 World Cup?", 'Emiliano Martínez', ['Hugo Lloris', 'Yassine Bounou', 'Thibaut Courtois'], 'World Cup Soccer'),
+  createQuestion('wc-21', "Which World Cup is often called the greatest of all time — featuring Maradona\'s \'Hand of God\'?", 'Mexico 1986', ['Italy 1990', 'USA 1994', 'France 1998'], 'World Cup Soccer'),
+  createQuestion('wc-22', "How many yellow cards equal a suspension for a World Cup player?", '2', ['3', '1', '4'], 'World Cup Soccer', 'easy'),
+  createQuestion('wc-23', "Which Canadian city will host World Cup 2026 matches?", 'Toronto and Vancouver', ['Montreal and Calgary', 'Ottawa and Edmonton', 'Toronto and Montreal'], 'World Cup Soccer'),
+  createQuestion('wc-24', "Kylian Mbappé scored a hat-trick in the 2022 final. Which country does he play for?", 'France', ['Belgium', 'Senegal', 'Morocco'], 'World Cup Soccer'),
+  createQuestion('wc-25', "Which African nation became the first to reach a World Cup semi-final in 2022?", 'Morocco', ['Senegal', 'Cameroon', 'Nigeria'], 'World Cup Soccer'),
+];
+
 // ========== GET QUESTIONS FOR GENRE ==========
 export function getQuestionsForGenre(genre: Genre): Question[] {
   let questions: Question[];
@@ -580,6 +609,9 @@ export function getQuestionsForGenre(genre: Genre): Question[] {
     case 'antigua_facts':
       questions = [...ANTIGUA_FACTS_QUESTIONS];
       break;
+    case 'world_cup_soccer':
+      questions = [...WORLD_CUP_SOCCER_QUESTIONS];
+      break;
     case 'mix_it_up':
       // Mix questions from all categories
       const all = [
@@ -600,6 +632,7 @@ export function getQuestionsForGenre(genre: Genre): Question[] {
         ...shuffleArray(CANADIAN_HISTORY_QUESTIONS).slice(0, 1),
         ...shuffleArray(SKIING_KNOWLEDGE_QUESTIONS).slice(0, 1),
         ...shuffleArray(ANTIGUA_FACTS_QUESTIONS).slice(0, 1),
+        ...shuffleArray(WORLD_CUP_SOCCER_QUESTIONS).slice(0, 1),
       ];
       questions = shuffleArray(all);
       break;

@@ -52,11 +52,11 @@ const seasonalConfig = {
     bgGradient: 'from-pink-900/10 via-transparent to-green-900/10',
   },
   summer: {
-    emoji: '☀️',
-    greeting: 'Summer Vibes!',
-    particles: ['☀️', '🌴', '🏖️', '🌊', '⭐', '✨'],
-    accentColor: 'text-yellow-500',
-    bgGradient: 'from-yellow-900/20 via-transparent to-blue-900/20',
+    emoji: '⚽',
+    greeting: 'World Cup 2026! 🏆',
+    particles: ['⚽', '🏆', '⚽', '🥅', '⚽', '🌍', '⚽', '🔥', '⭐', '⚽'],
+    accentColor: 'text-green-400',
+    bgGradient: 'from-green-900/20 via-transparent to-yellow-900/20',
   },
   halloween: {
     emoji: '🎃',
@@ -237,25 +237,27 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Fun Facts Ticker - Toronto Sports Trivia */}
+      {/* Fun Facts Ticker - World Cup Soccer Trivia */}
       <div className="fixed top-11 sm:top-14 left-0 right-0 z-20 bg-black/60 py-1.5 sm:py-2 overflow-hidden">
         <div className="ticker-wrapper">
           <div className="ticker-content">
-            <span className="ticker-item">🏀 The Raptors are the only NBA team based outside the USA!</span>
-            <span className="ticker-item">🏒 The Maple Leafs last won the Stanley Cup in 1967 - longest drought in NHL!</span>
-            <span className="ticker-item">⚾ The Blue Jays won back-to-back World Series in 1992 &amp; 1993!</span>
-            <span className="ticker-item">🏀 Vince Carter&apos;s 2000 Slam Dunk Contest is considered the greatest ever!</span>
-            <span className="ticker-item">🏒 Maple Leaf Gardens opened in 1931 and was built in just 5 months!</span>
-            <span className="ticker-item">⚾ Joe Carter&apos;s walk-off HR in &apos;93 is one of the most iconic moments in MLB history!</span>
-            <span className="ticker-item">🏀 The Raptors won their first NBA Championship in 2019!</span>
-            <span className="ticker-item">🏒 The Leafs are one of the NHL&apos;s &quot;Original Six&quot; teams!</span>
-            <span className="ticker-item">⚾ Rogers Centre (SkyDome) was the first stadium with a retractable roof!</span>
-            <span className="ticker-item">🏀 Kyle Lowry is known as the &quot;Greatest Raptor of All Time&quot;!</span>
-            <span className="ticker-item">🏒 Darryl Sittler scored 10 points in one game in 1976 - still an NHL record!</span>
-            <span className="ticker-item">⚾ Roberto Alomar&apos;s diving catch in &apos;92 ALCS is a Blue Jays legend!</span>
-            <span className="ticker-item">🏀 The Raptors are the only NBA team based outside the USA!</span>
-            <span className="ticker-item">🏒 The Maple Leafs last won the Stanley Cup in 1967 - longest drought in NHL!</span>
-            <span className="ticker-item">⚾ The Blue Jays won back-to-back World Series in 1992 &amp; 1993!</span>
+            <span className="ticker-item">⚽ Brazil has won the most World Cups — 5 titles (1958, 1962, 1970, 1994, 2002)!</span>
+            <span className="ticker-item">🏆 The 2026 World Cup is hosted by USA, Canada &amp; Mexico — the first with 48 teams!</span>
+            <span className="ticker-item">⚽ Miroslav Klose holds the all-time World Cup scoring record with 16 goals!</span>
+            <span className="ticker-item">🥅 Italy &amp; Germany have each won the World Cup 4 times!</span>
+            <span className="ticker-item">⚽ The first ever World Cup was held in Uruguay in 1930!</span>
+            <span className="ticker-item">🌍 Ronaldo (Brazil) scored 15 World Cup goals — the record before Klose!</span>
+            <span className="ticker-item">⚽ The longest penalty shootout in World Cup history lasted 6-5!</span>
+            <span className="ticker-item">🔥 France beat Croatia 4-2 in the 2018 World Cup Final!</span>
+            <span className="ticker-item">⚽ Only 8 countries have ever won the FIFA World Cup!</span>
+            <span className="ticker-item">🏆 Argentina won the 2022 World Cup in Qatar, ending Messi&apos;s long wait!</span>
+            <span className="ticker-item">⚽ The fastest World Cup goal was scored in just 11 seconds by Hakan Şükür in 2002!</span>
+            <span className="ticker-item">⭐ Just Fontaine scored 13 goals in a single 1958 World Cup — still the record!</span>
+            <span className="ticker-item">⚽ Brazil is the only team to have played in every single World Cup!</span>
+            <span className="ticker-item">🥅 The golden boot is awarded to the tournament&apos;s top scorer!</span>
+            <span className="ticker-item">⚽ Canada is co-hosting the 2026 World Cup — games in Toronto, Vancouver &amp; more!</span>
+            <span className="ticker-item">🏆 Brazil has won the most World Cups — 5 titles (1958, 1962, 1970, 1994, 2002)!</span>
+            <span className="ticker-item">⚽ The 2026 World Cup is hosted by USA, Canada &amp; Mexico — the first with 48 teams!</span>
           </div>
         </div>
       </div>
@@ -519,47 +521,47 @@ export default function Home() {
           animation: float-down linear infinite;
         }
 
-        /* Retro Banner - Beach Vibes */
+        /* Retro Banner - World Cup Soccer */
         .retro-banner {
-          background: linear-gradient(90deg, #0077B6, #00B4D8, #48CAE4, #00B4D8, #0077B6);
-          border-bottom: 4px solid #F4A261;
+          background: linear-gradient(90deg, #1a5c1a, #2d8a2d, #3aaa3a, #2d8a2d, #1a5c1a);
+          border-bottom: 4px solid #FFD700;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         /* Retro Text Shadow */
         .retro-text-shadow {
-          text-shadow: 3px 3px 0px #0077B6, -1px -1px 0px #F4A261;
+          text-shadow: 3px 3px 0px #1a5c1a, -1px -1px 0px #FFD700;
         }
 
-        /* Sunburst effect - Beach Sun & Ocean */
+        /* Sunburst effect - Soccer Field */
         .sunburst {
           background: conic-gradient(
             from 0deg,
-            #F4A261 0deg,
-            #48CAE4 15deg,
-            #F4A261 30deg,
-            #48CAE4 45deg,
-            #F4A261 60deg,
-            #48CAE4 75deg,
-            #F4A261 90deg,
-            #48CAE4 105deg,
-            #F4A261 120deg,
-            #48CAE4 135deg,
-            #F4A261 150deg,
-            #48CAE4 165deg,
-            #F4A261 180deg,
-            #48CAE4 195deg,
-            #F4A261 210deg,
-            #48CAE4 225deg,
-            #F4A261 240deg,
-            #48CAE4 255deg,
-            #F4A261 270deg,
-            #48CAE4 285deg,
-            #F4A261 300deg,
-            #48CAE4 315deg,
-            #F4A261 330deg,
-            #48CAE4 345deg,
-            #F4A261 360deg
+            #FFD700 0deg,
+            #2d8a2d 15deg,
+            #FFD700 30deg,
+            #2d8a2d 45deg,
+            #FFD700 60deg,
+            #2d8a2d 75deg,
+            #FFD700 90deg,
+            #2d8a2d 105deg,
+            #FFD700 120deg,
+            #2d8a2d 135deg,
+            #FFD700 150deg,
+            #2d8a2d 165deg,
+            #FFD700 180deg,
+            #2d8a2d 195deg,
+            #FFD700 210deg,
+            #2d8a2d 225deg,
+            #FFD700 240deg,
+            #2d8a2d 255deg,
+            #FFD700 270deg,
+            #2d8a2d 285deg,
+            #FFD700 300deg,
+            #2d8a2d 315deg,
+            #FFD700 330deg,
+            #2d8a2d 345deg,
+            #FFD700 360deg
           );
           border-radius: 50%;
           opacity: 0.3;
@@ -573,18 +575,18 @@ export default function Home() {
 
         /* Retro frame around logo */
         .retro-frame {
-          background: linear-gradient(135deg, #F4A261, #E76F51, #E9C46A);
+          background: linear-gradient(135deg, #FFD700, #FFA500, #32CD32);
           transform: rotate(3deg);
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
 
         /* Retro title gradient */
         .retro-text-gradient {
-          background: linear-gradient(180deg, #F4A261 0%, #E9C46A 50%, #48CAE4 100%);
+          background: linear-gradient(180deg, #FFD700 0%, #32CD32 50%, #FFD700 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          filter: drop-shadow(3px 3px 0px #0077B6);
+          filter: drop-shadow(3px 3px 0px #1a5c1a);
         }
 
         .retro-title {
@@ -592,16 +594,16 @@ export default function Home() {
         }
 
         .retro-subtitle {
-          color: #F4A261;
-          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(244, 162, 97, 0.3);
+          color: #FFD700;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.4);
           letter-spacing: 1px;
         }
 
         /* Logo Glow Effect */
         .logo-glow {
           box-shadow:
-            0 0 20px rgba(72, 202, 228, 0.4),
-            0 0 40px rgba(244, 162, 97, 0.3),
+            0 0 20px rgba(50, 205, 50, 0.5),
+            0 0 40px rgba(255, 215, 0, 0.4),
             0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
@@ -621,11 +623,11 @@ export default function Home() {
           animation: pulse-slow 3s ease-in-out infinite;
         }
 
-        /* Retro grid background */
+        /* Soccer field grid background */
         .retro-grid {
           background-image:
-            linear-gradient(rgba(72, 202, 228, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(72, 202, 228, 0.3) 1px, transparent 1px);
+            linear-gradient(rgba(50, 205, 50, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(50, 205, 50, 0.3) 1px, transparent 1px);
           background-size: 40px 40px;
         }
 
@@ -643,7 +645,7 @@ export default function Home() {
 
         .ticker-item {
           padding: 0 1.5rem;
-          color: #F4A261;
+          color: #FFD700;
           font-weight: 600;
           font-size: 0.75rem;
         }
